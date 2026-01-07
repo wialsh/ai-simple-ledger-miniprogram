@@ -1,0 +1,293 @@
+/* src/styles/common.scss */
+
+// 定义颜色变量
+$gray-50: #f9fafb;
+$gray-100: #f3f4f6;
+$gray-200: #e5e7eb;
+$gray-300: #d1d5db;
+$gray-400: #9ca3af;
+$gray-500: #6b7280;
+$gray-600: #4b5563;
+$gray-700: #374151;
+$gray-800: #1f2937;
+$gray-900: #111827;
+$red-500: #ef4444;
+$blue-800: #1f2937;
+// 主题色
+$primary-300: #deeceb;
+$primary-500: #76bdb9;
+$primary-600: #5ca09d;
+$primary-800: #406f6d;
+
+// 字体大小
+.font-medium {
+  font-weight: 500;
+}
+
+// 定义全局类名
+.text-gray-400 {
+  color: $gray-400;
+}
+.text-gray-500 {
+  color: $gray-500;
+}
+.text-gray-800 {
+  color: $gray-800;
+}
+.text-gray-900 {
+  color: $gray-900;
+}
+.text-red-500 {
+  color: $red-500;
+}
+.text-blue-800 {
+  color: $blue-800;
+}
+
+// 背景色类
+.bg-white {
+  background-color: #ffffff;
+}
+.bg-gray-100 {
+  background-color: $gray-100; // #f3f4f6
+}
+.bg-gray-50 {
+  background-color: $gray-50; // #f9fafb
+}
+// 小程序不支持 /50 语法，我们需要手动定义一个带透明度的类
+.bg-gray-50-50 {
+  background-color: rgba($gray-50, 0.5);
+}
+.bg-primary-300 {
+  background-color: $primary-300;
+}
+.bg-primary-500 {
+  background-color: $primary-500;
+}
+.bg-primary-600 {
+  background-color: $primary-600;
+}
+.bg-primary-800 {
+  background-color: $primary-800;
+}
+
+// 尺寸类 (对应 width: 40px; height: 40px)
+.w-10 {
+  width: 40px;
+}
+.h-10 {
+  height: 40px;
+}
+
+// 间距类
+.pt-20 {
+  padding-top: 80px; // 对应 paddingTop: '80px'
+}
+.pb-25 {
+  padding-bottom: 100px; // 对应 paddingBottom: '100px'
+}
+.mt-0-5 {
+  margin-top: 2px; // 对应 marginTop: '2px' (注意命名不能带点)
+}
+.mb-2 {
+  margin-bottom: 8px; // 示例：可以根据设计稿定义一些常用间距
+}
+.pb-24 {
+  padding-bottom: 96px; // 12px * 8 = 96px (Taro px to rpx 转换)
+}
+.min-h-screen {
+  min-height: 100vh; // 100vh 在小程序里是 rpx
+}
+
+// Flex 辅助类 (你原有代码里有一部分，确保 flex-center 存在很方便)
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flex-1 {
+  flex: 1;
+}
+.flex {
+  display: flex;
+}
+.flex-col {
+  flex-direction: column;
+}
+.items-center {
+  align-items: center;
+}
+.justify-center {
+  justify-content: center;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.items-center {
+  align-items: center;
+}
+.px-4 {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+.py-2 {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+.py-3 {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+.border-b {
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: #eee;
+}
+.border-gray-100 {
+  border-color: $gray-100;
+}
+.border-gray-50 {
+  border-color: $gray-50;
+}
+.mr-3 {
+  margin-right: 12px;
+}
+// .mt-0\.5 {
+//   margin-top: 2px;
+// }
+.opacity-50 {
+  opacity: 0.5;
+}
+.text-10px {
+  font-size: 10px; // 新增：对应 text-[10px]
+}
+.text-xs {
+  font-size: 12px;
+}
+.text-sm {
+  font-size: 14px;
+}
+.text-base {
+  font-size: 16px;
+}
+.text-lg {
+  font-size: 18px;
+}
+.text-xl {
+  font-size: 20px;
+}
+.rounded-full {
+  border-radius: 9999px;
+}
+.relative {
+  position: relative;
+}
+
+// --- 布局限制类 ---
+
+// // max-w-md (Tailwind 默认为 28rem = 448px)
+// // 在小程序中，通常是全屏，但如果你想限制最大宽度：
+// .max-w-md {
+//   max-width: 448px;
+// }
+// mx-auto (水平居中)
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+// overflow-hidden
+.overflow-hidden {
+  overflow: hidden;
+}
+// --- 阴影效果 ---
+
+// shadow-2xl
+.shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+// 底部滑出效果
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+//左侧滑入
+@keyframes slideInLeft {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+.animate-slide-in-left {
+  animation: slideInLeft 0.3s ease-out forwards;
+}
+
+.last-border-0 {
+  &:last-child {
+    border-bottom-width: 0 !important;
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+.animate-shake {
+  animation: shake 0.3s ease-in-out;
+}
+
+.transition-width {
+  transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.switch-transition {
+  transition: background-color 0.3s ease-in-out;
+}
+.switch-knob-transition {
+  transition: left 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin {
+  animation: spin 1s linear infinite;
+  /* 小程序 View 需要 block 或 inline-block 才能旋转 */
+  display: inline-block;
+}

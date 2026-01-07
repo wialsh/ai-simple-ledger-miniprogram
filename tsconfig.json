@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "noImplicitAny": false,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "lib",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strictNullChecks": true,
+    "sourceMap": true,
+    "rootDir": ".",
+    "lib": ["esnext", "DOM"], // 小程序其实没有 DOM，但为了 React 类型提示通常会加上
+    "jsx": "react-jsx", // 关键：使用 react-jsx (自动导入)
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "typeRoots": ["node_modules/@types"],
+    // "types": ["node", "sass"],
+    // "baseUrl": ".",
+    "paths": {
+      // TS5090 leading './'
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["./src", "./config"],
+  "compileOnSave": false
+}

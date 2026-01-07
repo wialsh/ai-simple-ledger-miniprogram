@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta
+      content="width=device-width,initial-scale=1,user-scalable=no,maximum-scale=1"
+      name="viewport"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <meta name="format-detection" content="telephone=no,address=no" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <!-- 1. 修改标题 -->
+    <title>简单记账</title>
+
+    <!-- 2. 保留 Taro 的注入脚本 -->
+    <script>
+      <%= htmlWebpackPlugin.options.script %>
+    </script>
+  </head>
+  <body>
+    <!-- 3. Taro 默认挂载点是 app -->
+    <div id="app"></div>
+  </body>
+</html>
