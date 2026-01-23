@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { ledgerPlanningService } from '@/services/api';
 import * as dateUtils from '@/utils/dateUtils';
-import { Ledger, LedgerPlan, PlanBudget } from '@/types';
+import { Ledger, LedgerPlan, PlanBill } from '@/types';
 
 export const useLedgerPlan = (ledger: Ledger, currentDate: Date) => {
   const [ledgerPlan, setLedgerPlan] = useState<LedgerPlan>();
@@ -11,31 +11,31 @@ export const useLedgerPlan = (ledger: Ledger, currentDate: Date) => {
     setLedgerPlan(fetchedLedgerPlan);
   };
 
-  const monthlyPlanBudget = useMemo(() => {
+  const monthlyPlanBill = useMemo(() => {
     if (ledgerPlan) {
-      const findedResult = ledgerPlan.planBudgets?.find(p => dateUtils.isSameMonth(p.planDate, currentDate));
+      const findedResult = ledgerPlan.planBills?.find(p => dateUtils.isSameMonth(p.planDate, currentDate));
       return findedResult || {};
     } else {
       return {};
     }
-  }, [ledgerPlan, currentDate]) as PlanBudget;
+  }, [ledgerPlan, currentDate]) as PlanBill;
 
   const updateLedgerPlan = (amount: number, planDate: Date) => {
     setLedgerPlan(prev => {
       if (!prev) {
         const planYear = dateUtils.getYear(planDate);
         const now = new Date();
-        const planBudgets = Array.from({ length: 12 }, (_, i) => ({
+        const planBills = Array.from({ length: 12 }, (_, i) => ({
           planDate: new Date(planYear, i, 1),
           amount: 0,
           type: 'monthly',
         }));
-        const updatedBudgets = planBudgets.map(p =>
+        const updatedBills = planBills.map(p =>
           dateUtils.isSameMonth(p.planDate, planDate) ? { ...p, amount, planDate } : p
         );
         const added = {
           id: now.getTime(),
-          planBudgets: updatedBudgets,
+          planBills: updatedBills,
           ledgerId: ledger.id,
           createdAt: now,
           updatedAt: now,
@@ -43,10 +43,10 @@ export const useLedgerPlan = (ledger: Ledger, currentDate: Date) => {
         };
         return added;
       }
-      const updatedBudgets = prev.planBudgets.map(p =>
+      const updatedBills = prev.planBills.map(p =>
         dateUtils.isSameMonth(p.planDate, planDate) ? { ...p, amount, planDate } : p
       );
-      return { ...prev, planBudgets: updatedBudgets };
+      return { ...prev, planBills: updatedBills };
     });
   };
 
@@ -59,6 +59,6 @@ export const useLedgerPlan = (ledger: Ledger, currentDate: Date) => {
   return {
     ledgerPlan,
     updateLedgerPlan,
-    monthlyPlanBudget,
+    monthlyPlanBill,
   };
 };

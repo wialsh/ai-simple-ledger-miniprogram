@@ -67,27 +67,7 @@ export interface Ledger {
   joiningTime: Date; //加入账本的时间
   shareStartTime: Date; //可协同的开始时间
   categories: LedgerCategory[];
-  budgets?: Budget[];
-  createdAt: Date; //创建时间
-  updatedAt: Date; //更新时间
-  isDeleted: boolean; //是否删除
-}
-
-export interface Budget {
-  amounts: number[]; //预算金额，1月～12月（0对应1月，以此类推）
-  year: number; //做预算的年份
-}
-
-export interface PlanBudget {
-  amount: number; //计划金额
-  planDate: Date; //计划时间（每月月初）
-  type: string; //计划类型
-}
-
-export interface LedgerPlan {
-  id: number; //计划ID
-  planBudgets: PlanBudget[];
-  ledgerId: number; //账本ID
+  bills?: Bill[];
   createdAt: Date; //创建时间
   updatedAt: Date; //更新时间
   isDeleted: boolean; //是否删除
@@ -99,6 +79,26 @@ export interface LedgerCategory {
   type: number; //账本分类的类型(0-未设置（默认）,1-支出，2-收入)
   componentName: string; //分类组件名称
   componentColor: string; //分类组件颜色
+}
+
+export interface Bill {
+  amounts: number[]; //预算金额，1月～12月（0对应1月，以此类推）
+  year: number; //做预算的年份
+}
+
+export interface PlanBill {
+  amount: number; //计划金额
+  planDate: Date; //计划时间（每月月初）
+  type: string; //计划类型
+}
+
+export interface LedgerPlan {
+  id: number; //计划ID
+  planBills: PlanBill[];
+  ledgerId: number; //账本ID
+  createdAt: Date; //创建时间
+  updatedAt: Date; //更新时间
+  isDeleted: boolean; //是否删除
 }
 
 export interface LedgerSharingMember {
@@ -117,4 +117,12 @@ export interface MemberSearchResult {
   id: number;
   avatar: string;
   nickname: string;
+}
+
+export interface ChatMessage {
+  id: number;
+  type: 'text' | 'image' | 'video';
+  content: string; // Text content or URL for media
+  sender: 'user' | 'support';
+  timestamp: Date;
 }

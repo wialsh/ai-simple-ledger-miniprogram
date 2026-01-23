@@ -1,6 +1,6 @@
 import { View } from '@tarojs/components';
 import { useLoad } from '@tarojs/taro';
-import MainAppComponent from '@/pages/index/Main';
+import { MainAppComponent } from '@/pages/index/Main';
 import './index.scss';
 
 export default function Index() {

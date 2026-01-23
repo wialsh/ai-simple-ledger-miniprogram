@@ -8,7 +8,8 @@ import {
   Category,
   LedgerCategory,
   LedgerSharingMember,
-  Budget,
+  Bill,
+  ChatMessage,
 } from './data.type';
 import { CategoriesSpend, TrendData } from './stat.type';
 
@@ -32,7 +33,7 @@ export interface AppContextType {
   // 账本
   currentLedger: Ledger;
   activateLedger: (ledgerId: number) => void;
-  updateLedgerBudget: (updated: Budget) => void;
+  updateLedgerBill: (updated: Bill) => void;
   allLedgers: Ledger[];
   displayLedgers: Ledger[];
   createLedger: (ledgerName: string, componentName: string, ledgerCategories: LedgerCategory[]) => void;
@@ -41,6 +42,7 @@ export interface AppContextType {
   deleteLedger: (ledgerId: number) => void;
   mineLedgers: Ledger[];
   joinedLedgers: Ledger[];
+  deleteLedgerCategory: (categoryId: string) => void;
 
   //账本成员
   ledgerSharingMembers: LedgerSharingMember[];
@@ -60,4 +62,8 @@ export interface AppContextType {
   dailySpent: number;
   categoriesData: CategoriesSpend[];
   trendData: TrendData[];
+
+  // 消息
+  chatMessages: ChatMessage[];
+  updateChatMessage: (content: string, sender: 'user' | 'support', type: 'text' | 'image' | 'video') => void;
 }

@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { ledgersService } from '@/services/api';
-import { UserProfile, Ledger, LedgerCategory, LedgerPick, Budget } from '@/types';
+import { UserProfile, Ledger, LedgerCategory, LedgerPick, Bill } from '@/types';
 
 export const useLedgers = (userProfile: UserProfile) => {
   // const [currentLedger, setCurrentLedger] = useState<Ledger>({} as Ledger);
@@ -54,7 +54,7 @@ export const useLedgers = (userProfile: UserProfile) => {
     setAllLedgers(prev => [...prev, added]);
   };
 
-  const updateLedger = (ledgerId: number, updates: Partial<Pick<Ledger, LedgerPick>>) => {
+  const updateLedger = (ledgerId, updates: Partial<Pick<Ledger, LedgerPick>>) => {
     setAllLedgers(ledgers => {
       return ledgers.map(ledger =>
         ledger.id !== ledgerId ? ledger : { ...ledger, ...updates, updatedAt: new Date() }
@@ -72,6 +72,21 @@ export const useLedgers = (userProfile: UserProfile) => {
     }
   };
 
+  const deleteLedgerCategory = (categoryId: string) => {
+    setAllLedgers(prev =>
+      prev.map(ledger => {
+        if (ledger.id === currentLedger.id) {
+          const updatedCategories = ledger.categories?.filter(cat => cat.id !== categoryId) || [];
+          return { ...ledger, categories: updatedCategories };
+        }
+        return ledger;
+      })
+    );
+  };
+
+  /**
+   * 选择账本
+   */
   const activateLedger = (ledgerId: number) => {
     const selectedLedger = allLedgers.find(ledger => ledger.id === ledgerId);
 
@@ -84,24 +99,27 @@ export const useLedgers = (userProfile: UserProfile) => {
     }
   };
 
-  const updateLedgerBudget = (updated: Budget) => {
+  /**
+   * 更新账本预算
+   */
+  const updateLedgerBill = (updated: Bill) => {
     setAllLedgers(prev => {
       return prev.map(ledger => {
         if (ledger.id === currentLedger.id) {
-          const budgets = ledger?.budgets || [];
-          if (budgets.length > 0) {
-            const hasBudget = budgets.some(budget => budget.year === updated.year);
-            if (hasBudget) {
+          const bills = ledger?.bills || [];
+          if (bills.length > 0) {
+            const hasBill = bills.some(bill => bill.year === updated.year);
+            if (hasBill) {
               // 更新
-              const updatedBudgets = budgets.map(budget => (budget.year === updated.year ? updated : budget));
-              return { ...ledger, budgets: updatedBudgets };
+              const updatedBills = bills.map(bill => (bill.year === updated.year ? updated : bill));
+              return { ...ledger, bills: updatedBills };
             } else {
               // 新增
-              return { ...ledger, budgets: [...budgets, updated] };
+              return { ...ledger, bills: [...bills, updated] };
             }
           }
           // 新增
-          return { ...ledger, budgets: [updated] };
+          return { ...ledger, bills: [updated] };
         }
         return ledger;
       });
@@ -136,7 +154,7 @@ export const useLedgers = (userProfile: UserProfile) => {
   return {
     currentLedger,
     activateLedger,
-    updateLedgerBudget,
+    updateLedgerBill,
     allLedgers,
     displayLedgers,
     createLedger,
@@ -145,5 +163,6 @@ export const useLedgers = (userProfile: UserProfile) => {
     deleteLedger,
     mineLedgers,
     joinedLedgers,
+    deleteLedgerCategory,
   };
 };

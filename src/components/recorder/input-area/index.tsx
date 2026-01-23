@@ -1,0 +1,1 @@
+export { InputAreaModal } from './InputArea';

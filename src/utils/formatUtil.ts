@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 export const formatNumber = (num: number) => {
   // 1. 先判断是不是 number 类型
   if (typeof num !== 'number' || isNaN(num)) {

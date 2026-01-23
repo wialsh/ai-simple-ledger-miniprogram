@@ -2,7 +2,7 @@
 import React, { useMemo } from 'react';
 import { View, Text } from '@tarojs/components';
 
-interface FormatNumberProps {
+interface NumberFormatProps {
   value: number;
   /** 用于整数部分和小数点的样式 */
   mainStyle?: React.CSSProperties;
@@ -14,7 +14,7 @@ interface FormatNumberProps {
   style?: React.CSSProperties;
 }
 
-export const FormatNumber: React.FC<FormatNumberProps> = ({ value, mainStyle, decimalStyle, unitStyle, style }) => {
+export const NumberFormat: React.FC<NumberFormatProps> = ({ value, mainStyle, decimalStyle, unitStyle, style }) => {
   // 核心逻辑保持不变，使用 useMemo 计算显示值
   const formattedData = useMemo(() => {
     let currentUnit = '';
@@ -98,4 +98,4 @@ export const FormatNumber: React.FC<FormatNumberProps> = ({ value, mainStyle, de
   );
 };
 
-export default FormatNumber;
+export default NumberFormat;
