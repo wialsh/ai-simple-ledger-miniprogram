@@ -3,36 +3,23 @@ import { transactionService } from '@/services/api';
 import * as dateUtils from '@/utils/dateUtils';
 import { Transaction, Ledger, UserProfile, LedgerCategory } from '@/types';
 
-export const useTransactions = (
-  userProfile: UserProfile,
-  ledger: Ledger,
-  currentDate: Date
-) => {
+export const useTransactions = (userProfile: UserProfile, ledger: Ledger, currentDate: Date) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const fetchData = async () => {
     // await Promise.all
-    const fetchedTransactions = await transactionService.getByLedgerId(
-      ledger.id
-    );
+    const fetchedTransactions = await transactionService.getByLedgerId(ledger.id);
 
     setTransactions(fetchedTransactions);
   };
 
   // 获取月度交易
   const monthlyTransactions = useMemo(() => {
-    const findedResult = transactions.filter(t =>
-      dateUtils.isSameMonth(t.createdAt, currentDate)
-    );
+    const findedResult = transactions.filter(t => dateUtils.isSameMonth(t.createdAt, currentDate));
     return findedResult || [];
   }, [transactions, currentDate]);
 
   // 新增一笔消费
-  const addTransaction = (
-    amount: number,
-    recordDate: Date,
-    remark: string,
-    category: LedgerCategory
-  ) => {
+  const addTransaction = (amount: number, recordDate: Date, remark: string, category: LedgerCategory) => {
     const trans: Transaction = {
       id: Date.now(),
       amount,
@@ -41,8 +28,8 @@ export const useTransactions = (
       userId: userProfile.id,
       ledgerId: ledger.id,
       ownerId: ledger.ownerId,
-      catrgoryId: category.id,
-      catrgoryName: category.name,
+      categoryId: category.id,
+      categoryName: category.name,
       componentName: category.componentName,
       componentColor: category.componentColor,
       createdAt: new Date(),
@@ -64,9 +51,7 @@ export const useTransactions = (
       amount: number;
     }[] = [];
     monthlyTransactions?.forEach(t => {
-      const existing = dailyGroups.find(g =>
-        dateUtils.isSameDay(g.date, t.createdAt)
-      );
+      const existing = dailyGroups.find(g => dateUtils.isSameDay(g.date, t.createdAt));
       if (existing) {
         existing.items.push(t);
         existing.amount += t.amount;

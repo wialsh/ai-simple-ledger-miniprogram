@@ -1,8 +1,4 @@
-import axios, {
-  AxiosInstance,
-  AxiosResponse,
-  InternalAxiosRequestConfig,
-} from 'axios';
+import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import Taro from '@tarojs/taro';
 
 // 判断当前是否是 H5 环境
@@ -11,9 +7,7 @@ const isH5 = process.env.TARO_ENV === 'h5';
 // 如果是 H5，可以使用相对路径 '/api' 触发代理
 // 如果是 小程序，必须写死完整的后端地址
 // ⚠️ 注意：真机预览时请将 127.0.0.1 换成电脑的局域网 IP (如 192.168.1.5)
-export const BASE_URL = isH5
-  ? '/api'
-  : 'http://127.0.0.1:4523/m1/7496601-7232131-default';
+export const BASE_URL = isH5 ? '/api' : 'http://127.0.0.1:4523/m1/7496601-7232131-default';
 
 const apiClient: AxiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -24,15 +18,9 @@ const apiClient: AxiosInstance = axios.create({
       // 1. 处理 URL：如果是相对路径，需要手动拼接 baseURL
       // (虽然 axios 内部会拼接，但在自定义 adapter 中有时候需要自己处理以防万一)
       let url = config.url || '';
-      if (
-        !url.startsWith('http') &&
-        !url.startsWith('https') &&
-        config.baseURL
-      ) {
+      if (!url.startsWith('http') && !url.startsWith('https') && config.baseURL) {
         // 去除重复的斜杠
-        const baseURL = config.baseURL.endsWith('/')
-          ? config.baseURL.slice(0, -1)
-          : config.baseURL;
+        const baseURL = config.baseURL.endsWith('/') ? config.baseURL.slice(0, -1) : config.baseURL;
         const subURL = url.startsWith('/') ? url : `/${url}`;
         url = `${baseURL}${subURL}`;
       }
@@ -47,7 +35,7 @@ const apiClient: AxiosInstance = axios.create({
          * 在 Axios 中，如果请求没有设置特殊的 header，config.headers 可能会是 undefined。
          * 当你把它直接传给 Taro.request 时，就报错了
          */
-        header: config.ç || {}, // Axios 是 headers，Taro 是 header
+        header: config.headers || {}, // Axios 是 headers，Taro 是 header
         success: res => {
           // 3. 构造 Axios 需要的响应结构
           const response: AxiosResponse = {

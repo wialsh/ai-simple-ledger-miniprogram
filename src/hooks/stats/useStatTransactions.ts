@@ -35,13 +35,13 @@ export const useStatTransactions = (monthlyTransactions: Transaction[]) => {
   const categoriesData = useMemo(() => {
     const map = new Map<string, CategoriesSpend>();
     monthlyTransactions.forEach(t => {
-      const statInfo = map.get(t.catrgoryId);
+      const statInfo = map.get(t.categoryId);
       if (statInfo) {
         statInfo.amount += t.amount;
-        map.set(t.catrgoryId, statInfo);
+        map.set(t.categoryId, statInfo);
       } else {
-        map.set(t.catrgoryId, {
-          displayName: t.catrgoryName,
+        map.set(t.categoryId, {
+          displayName: t.categoryName,
           name: t.componentName,
           color: t.componentColor,
           amount: t.amount,
@@ -50,7 +50,7 @@ export const useStatTransactions = (monthlyTransactions: Transaction[]) => {
     });
     // entries获取所有键值对（[key, value]）迭代器
     return Array.from(map.entries())
-      .map(([catrgoryId, statInfo]) => {
+      .map(([categoryId, statInfo]) => {
         return statInfo;
       })
       .sort((a, b) => b.amount - a.amount);

@@ -42,7 +42,7 @@ export const TransCardModal: React.FC<TransCardModalProps> = ({ transaction, isL
 
       {/* Content Text */}
       <View style={{ flex: 1 }}>
-        <Text style={{ color: '#1f2937' }}>{transaction.catrgoryName}</Text>
+        <Text style={{ color: '#1f2937' }}>{transaction.categoryName}</Text>
         {transaction.remark && (
           // 注意：这里需要 Text 包裹或者用 block 元素
           <View
