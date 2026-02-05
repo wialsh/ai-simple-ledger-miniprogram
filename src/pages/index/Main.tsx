@@ -4,7 +4,7 @@ import { AppContext } from '@/context/AppContext';
 import { TabBar, RecorderPage, DetailsPage, ChartsPage, BillPage, MinePage } from '@/pages/core';
 
 import {
-  useUserProfile,
+  useUserProfile2,
   useLedgers,
   useLedgerSharingMember,
   useTransactions,
@@ -21,16 +21,16 @@ export const MainAppComponent: React.FC = () => {
   const [activeTab, setActiveTab] = useState<Tab>('details');
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [showRecorder, setShowRecorder] = useState(false);
-  const [userId, setUserId] = useState<number>(3010);
 
   // --- Hooks ---
-  const { userProfile, updateUserProfile } = useUserProfile(userId);
-  const { allCategories } = useAllCategories();
+  const { userProfile, updateUserProfile } = useUserProfile2(); // Hardcoded userId for demo
+  // const { allCategories } = useAllCategories();
+  console.log('userProfile', userProfile);
 
   const {
     currentLedger,
     activateLedger,
-    updateLedgerBill,
+    updateLedgerBudgets,
     allLedgers,
     displayLedgers,
     createLedger,
@@ -74,7 +74,7 @@ export const MainAppComponent: React.FC = () => {
       updateUserProfile,
 
       // 分类
-      allCategories,
+      // allCategories,
 
       // 交易
       transactions,
@@ -85,7 +85,7 @@ export const MainAppComponent: React.FC = () => {
       // 账本
       currentLedger,
       activateLedger,
-      updateLedgerBill,
+      updateLedgerBudgets,
       allLedgers,
       displayLedgers,
       createLedger,
@@ -118,14 +118,14 @@ export const MainAppComponent: React.FC = () => {
       currentDate,
       userProfile,
       updateUserProfile,
-      allCategories,
+      // allCategories,
       transactions,
       addTransaction,
       monthlyTransactions,
       dailyTotalTransactions,
       currentLedger,
       activateLedger,
-      updateLedgerBill,
+      updateLedgerBudgets,
       allLedgers,
       displayLedgers,
       createLedger,

@@ -11,6 +11,7 @@
   },
   "scripts": {
     "dev:weapp": "npm run build:weapp -- --watch",
+    "dev:weapp:test": "npm run build:weapp -- --watch --mode test",
     "dev:swan": "npm run build:swan -- --watch",
     "dev:alipay": "npm run build:alipay -- --watch",
     "dev:tt": "npm run build:tt -- --watch",
@@ -24,6 +25,7 @@
     "prepare": "husky",
     "new": "taro new",
     "build:weapp": "taro build --type weapp",
+    "build:weapp:test": "taro build --type weapp --mode test",
     "build:swan": "taro build --type swan",
     "build:alipay": "taro build --type alipay",
     "build:tt": "taro build --type tt",

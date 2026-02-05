@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { ledgerPlanningService } from '@/services/api';
+// import { ledgerPlanningService } from '@/services/api';
 import * as dateUtils from '@/utils/dateUtils';
 import { Ledger, LedgerPlan, PlanBill } from '@/types';
 
@@ -7,8 +7,8 @@ export const useLedgerPlan = (ledger: Ledger, currentDate: Date) => {
   const [ledgerPlan, setLedgerPlan] = useState<LedgerPlan>();
   // console.log('useLedgerPlan', ledgerId, currentDate);
   const fetchData = async () => {
-    const fetchedLedgerPlan = await ledgerPlanningService.byLedgerId(ledger.id);
-    setLedgerPlan(fetchedLedgerPlan);
+    // const fetchedLedgerPlan = await ledgerPlanningService.byLedgerId(ledger.id);
+    // setLedgerPlan(fetchedLedgerPlan);
   };
 
   const monthlyPlanBill = useMemo(() => {

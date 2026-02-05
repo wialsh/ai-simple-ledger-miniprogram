@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
-import { ledgersService } from '@/services/api';
-import { UserProfile, Ledger, LedgerCategory, LedgerPick, Bill } from '@/types';
+import { ledgersService } from '@/services/ledger-api';
+import { UserProfile, Ledger, LedgerCategory, LedgerPick, Budget } from '@/types';
 
 export const useLedgers = (userProfile: UserProfile) => {
   // const [currentLedger, setCurrentLedger] = useState<Ledger>({} as Ledger);
@@ -76,7 +76,7 @@ export const useLedgers = (userProfile: UserProfile) => {
     setAllLedgers(prev =>
       prev.map(ledger => {
         if (ledger.id === currentLedger.id) {
-          const updatedCategories = ledger.categories?.filter(cat => cat.id !== categoryId) || [];
+          const updatedCategories = ledger.categories?.filter(cat => cat.catId !== categoryId) || [];
           return { ...ledger, categories: updatedCategories };
         }
         return ledger;
@@ -102,24 +102,24 @@ export const useLedgers = (userProfile: UserProfile) => {
   /**
    * 更新账本预算
    */
-  const updateLedgerBill = (updated: Bill) => {
+  const updateLedgerBudgets = (updated: Budget[]) => {
     setAllLedgers(prev => {
       return prev.map(ledger => {
         if (ledger.id === currentLedger.id) {
-          const bills = ledger?.bills || [];
-          if (bills.length > 0) {
-            const hasBill = bills.some(bill => bill.year === updated.year);
-            if (hasBill) {
+          const budgets = ledger?.budgets || [];
+          if (budgets.length > 0) {
+            const hasBudget = budgets.some(budget => budget.year === updated[0].year);
+            if (hasBudget) {
               // 更新
-              const updatedBills = bills.map(bill => (bill.year === updated.year ? updated : bill));
-              return { ...ledger, bills: updatedBills };
+              const updatedBudgets = budgets.map(budget => (budget.year === updated[0].year ? updated[0] : budget));
+              return { ...ledger, budgets: updatedBudgets };
             } else {
               // 新增
-              return { ...ledger, bills: [...bills, updated] };
+              return { ...ledger, budgets: [...budgets, ...updated] };
             }
           }
           // 新增
-          return { ...ledger, bills: [updated] };
+          return { ...ledger, budgets: updated };
         }
         return ledger;
       });
@@ -154,7 +154,7 @@ export const useLedgers = (userProfile: UserProfile) => {
   return {
     currentLedger,
     activateLedger,
-    updateLedgerBill,
+    updateLedgerBudgets,
     allLedgers,
     displayLedgers,
     createLedger,

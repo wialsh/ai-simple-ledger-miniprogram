@@ -53,7 +53,7 @@ export interface Ledger {
   joiningTime: Date; //加入账本的时间
   shareStartTime: Date; //可协同的开始时间
   categories: LedgerCategory[];
-  Budgets?: Budget[];
+  budgets?: Budget[];
   createdAt: Date; //创建时间
   updatedAt: Date; //更新时间
   isDeleted: boolean; //是否删除

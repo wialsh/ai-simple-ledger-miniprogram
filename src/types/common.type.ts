@@ -14,4 +14,4 @@ export type LedgerPick =
   | 'isActived'
   | 'shareStartTime'
   | 'categories'
-  | 'bills';
+  | 'budgets';

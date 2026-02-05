@@ -1,4 +1,5 @@
 export * from './user/useUserProfile';
+export * from './user/useUserProfile2';
 export * from './user/useChatMessage';
 export * from './ledger/useLedger';
 export * from './ledger/plan/useLedgerPlan';

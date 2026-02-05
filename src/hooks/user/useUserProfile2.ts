@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { userService } from '@/services/ledger-api';
+import { loginService } from '@/services/ledger-api';
 import { UserProfile, UserProfileUpdatable } from '@/types';
 
-export const useUserProfile = (userId: number) => {
+export const useUserProfile2 = () => {
   const [userProfile, setUserProfile] = useState<UserProfile>();
   const fetchData = async () => {
-    const fetchedUser = await userService.getProfile(userId);
-    setUserProfile(fetchedUser[0]);
+    const fetchedUserProfile = await loginService.login();
+    setUserProfile(fetchedUserProfile);
   };
 
   const updateUserProfile = (updated: UserProfileUpdatable) => {
@@ -15,6 +15,6 @@ export const useUserProfile = (userId: number) => {
 
   useEffect(() => {
     fetchData();
-  }, [userId]);
+  }, []);
   return { userProfile, updateUserProfile };
 };

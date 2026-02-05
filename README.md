@@ -44,6 +44,20 @@ rm -rf dist node_modules/.cache
 
 ## 重新编译
 
+开发时：运行 yarn dev:weapp，Taro 自动读取 .env.development
+
 ```bash
 yarn dev:weapp
+```
+
+测试时：运行 yarn dev:weapp:test，Taro 读取 .env.test，BASE_URL 变为测试服地址。
+
+```bash
+yarn dev:weapp:test
+```
+
+上线时：运行 yarn build:weapp，Taro 读取 .env.production，BASE_URL 变为正式服地址。
+
+```bash
+yarn build:weapp
 ```

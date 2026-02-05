@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { transactionService } from '@/services/api';
+import { transactionService } from '@/services/ledger-api';
 import * as dateUtils from '@/utils/dateUtils';
 import { Transaction, Ledger, UserProfile, LedgerCategory } from '@/types';
 
