@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { userService } from '@/services/ledger-api';
+import { userService } from '@/services';
 import { UserProfile, UserProfileUpdatable } from '@/types';
 
 export const useUserProfile = (userId: number) => {

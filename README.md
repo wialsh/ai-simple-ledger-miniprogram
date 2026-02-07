@@ -31,6 +31,7 @@ my-taro-app/
 ```
 
 ```bash
+yarn install
 yarn add @tarojs/plugin-html
 yarn add @nutui/icons-react-taro
 yarn add echarts echarts-taro3-react

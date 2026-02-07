@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { loginService } from '@/services/ledger-api';
+import { wxLogin } from '@/services';
 import { UserProfile, UserProfileUpdatable } from '@/types';
 
 export const useUserProfile2 = () => {
   const [userProfile, setUserProfile] = useState<UserProfile>();
   const fetchData = async () => {
-    const fetchedUserProfile = await loginService.login();
+    const fetchedUserProfile = undefined;
     setUserProfile(fetchedUserProfile);
   };
 

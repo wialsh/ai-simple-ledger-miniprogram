@@ -13,6 +13,5 @@ if (isH5 && isDev) {
 
 export const BASE_URL = baseUrl;
 export const TIMEOUT = 5000;
-// --- 配置常量 ---
-export const CLOUD_ENV = 'prod-6gn4gq2x618b4775'; // 替换：云环境ID
-export const X_WX_SERVICE = 'springboot-aqak-004'; // 替换：服务名称
+export const CLOUD_ENV = process.env.TARO_APP_CLOUD_ENV || '';
+export const X_WX_SERVICE = process.env.TARO_APP_X_WX_SERVICE || '';

@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { AppContext } from '@/context/AppContext';
 import { TabBar, RecorderPage, DetailsPage, ChartsPage, BillPage, MinePage } from '@/pages/core';
@@ -16,6 +17,7 @@ import {
 
 import { Tab } from '@/types';
 import { COLORS } from '@/styles/colors';
+import { cloudLogin } from '@/services';
 
 export const MainAppComponent: React.FC = () => {
   const [activeTab, setActiveTab] = useState<Tab>('details');
@@ -115,45 +117,56 @@ export const MainAppComponent: React.FC = () => {
       updateChatMessage,
     }),
     [
-      currentDate,
-      userProfile,
-      updateUserProfile,
-      // allCategories,
-      transactions,
-      addTransaction,
-      monthlyTransactions,
-      dailyTotalTransactions,
-      currentLedger,
       activateLedger,
-      updateLedgerBudgets,
-      allLedgers,
-      displayLedgers,
-      createLedger,
       addLedger,
-      updateLedger,
-      deleteLedger,
-      mineLedgers,
-      joinedLedgers,
-      deleteLedgerCategory,
-      ledgerSharingMembers,
-      setLedgerSharingMembers,
-      updateLedgerSharingMember,
       addLedgerSharingMember,
-      deleteLedgerSharingMember,
-      monthlySpent,
-      dailySpent,
+      addTransaction,
+      allLedgers,
       categoriesData,
-      trendData,
-      monthlyBudget,
       chatMessages,
+      createLedger,
+      currentDate,
+      currentLedger,
+      dailySpent,
+      dailyTotalTransactions,
+      deleteLedger,
+      deleteLedgerCategory,
+      deleteLedgerSharingMember,
+      displayLedgers,
+      joinedLedgers,
+      ledgerSharingMembers,
+      mineLedgers,
+      monthlyBudget,
+      monthlySpent,
+      monthlyTransactions,
+      setLedgerSharingMembers,
+      transactions,
+      trendData,
       updateChatMessage,
+      updateLedger,
+      updateLedgerBudgets,
+      updateLedgerSharingMember,
+      updateUserProfile,
+      userProfile,
     ]
   );
+
+  const handleLogin = async () => {
+    const userInfo = await cloudLogin();
+    console.log('登录成功，用户信息：', userInfo);
+    updateUserProfile(userInfo);
+  };
 
   const handleTabChange = (t: Tab) => {
     if (t === 'add') {
       setShowRecorder(true);
     } else {
+      if (t === activeTab) return; // 点击当前 Tab 不重复切换
+      if (t === 'mine') {
+        Taro.showToast({ title: '请先登录', icon: 'none' });
+        handleLogin();
+        return;
+      }
       setActiveTab(t);
     }
   };
