@@ -1,37 +1,35 @@
 import React, { useState, useMemo } from 'react';
 import Taro from '@tarojs/taro';
-import { View } from '@tarojs/components';
+import { View, Text } from '@tarojs/components';
 import { AppContext } from '@/context/AppContext';
 import { TabBar, RecorderPage, DetailsPage, ChartsPage, BillPage, MinePage } from '@/pages/core';
-
 import {
-  useUserProfile2,
+  useUserProfile,
   useLedgers,
-  useLedgerSharingMember,
   useTransactions,
   useStatTransactions,
   useStatLedgerBill,
-  useAllCategories,
   useChatMessage,
 } from '@/hooks';
-
-import { Tab } from '@/types';
+import * as dateUtils from '@/utils/dateUtils';
 import { COLORS } from '@/styles/colors';
-import { cloudLogin } from '@/services';
+import type { Tab } from '@/types';
 
 export const MainAppComponent: React.FC = () => {
   const [activeTab, setActiveTab] = useState<Tab>('details');
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
+  // const [currentDateStr, setCurrentDateStr] = useState<string>(dateUtils.getTodayStr(currentDate));
   const [showRecorder, setShowRecorder] = useState(false);
 
   // --- Hooks ---
-  const { userProfile, updateUserProfile } = useUserProfile2(); // Hardcoded userId for demo
-  // const { allCategories } = useAllCategories();
+  const currentDateStr = '2024-06-01'; // 固定日期，方便测试用户信息的缓存和更新逻辑
+  const { userProfile, setUserProfile } = useUserProfile(currentDateStr);
+
   console.log('userProfile', userProfile);
 
   const {
     currentLedger,
-    activateLedger,
+    selectLedger,
     updateLedgerBudgets,
     allLedgers,
     displayLedgers,
@@ -42,19 +40,10 @@ export const MainAppComponent: React.FC = () => {
     mineLedgers,
     joinedLedgers,
     deleteLedgerCategory,
-  } = useLedgers(userProfile!);
-
-  const {
-    ledgerSharingMembers,
-    setLedgerSharingMembers,
-    updateLedgerSharingMember,
-    addLedgerSharingMember,
-    deleteLedgerSharingMember,
-  } = useLedgerSharingMember(currentLedger?.id as number);
+  } = useLedgers(userProfile);
 
   const { transactions, addTransaction, monthlyTransactions, dailyTotalTransactions } = useTransactions(
-    userProfile!,
-    currentLedger!,
+    currentLedger,
     currentDate
   );
 
@@ -73,7 +62,7 @@ export const MainAppComponent: React.FC = () => {
 
       // 用户信息
       userProfile,
-      updateUserProfile,
+      setUserProfile,
 
       // 分类
       // allCategories,
@@ -86,7 +75,7 @@ export const MainAppComponent: React.FC = () => {
 
       // 账本
       currentLedger,
-      activateLedger,
+      selectLedger,
       updateLedgerBudgets,
       allLedgers,
       displayLedgers,
@@ -99,11 +88,11 @@ export const MainAppComponent: React.FC = () => {
       deleteLedgerCategory,
 
       // 账本成员
-      ledgerSharingMembers,
-      setLedgerSharingMembers,
-      updateLedgerSharingMember,
-      addLedgerSharingMember,
-      deleteLedgerSharingMember,
+      // ledgerSharingMembers,
+      // setLedgerSharingMembers,
+      // updateLedgerSharingMember,
+      // addLedgerSharingMember,
+      // deleteLedgerSharingMember,
 
       // 消费统计
       monthlySpent,
@@ -117,9 +106,7 @@ export const MainAppComponent: React.FC = () => {
       updateChatMessage,
     }),
     [
-      activateLedger,
       addLedger,
-      addLedgerSharingMember,
       addTransaction,
       allLedgers,
       categoriesData,
@@ -131,31 +118,23 @@ export const MainAppComponent: React.FC = () => {
       dailyTotalTransactions,
       deleteLedger,
       deleteLedgerCategory,
-      deleteLedgerSharingMember,
       displayLedgers,
       joinedLedgers,
-      ledgerSharingMembers,
       mineLedgers,
       monthlyBudget,
       monthlySpent,
       monthlyTransactions,
-      setLedgerSharingMembers,
+      selectLedger,
       transactions,
       trendData,
       updateChatMessage,
       updateLedger,
       updateLedgerBudgets,
-      updateLedgerSharingMember,
-      updateUserProfile,
+      setUserProfile,
       userProfile,
     ]
   );
-
-  const handleLogin = async () => {
-    const userInfo = await cloudLogin();
-    console.log('登录成功，用户信息：', userInfo);
-    updateUserProfile(userInfo);
-  };
+  // const contextValue = {};
 
   const handleTabChange = (t: Tab) => {
     if (t === 'add') {
@@ -164,8 +143,7 @@ export const MainAppComponent: React.FC = () => {
       if (t === activeTab) return; // 点击当前 Tab 不重复切换
       if (t === 'mine') {
         Taro.showToast({ title: '请先登录', icon: 'none' });
-        handleLogin();
-        return;
+        // fetchUserProfile();
       }
       setActiveTab(t);
     }
@@ -202,5 +180,6 @@ export const MainAppComponent: React.FC = () => {
         {showRecorder && <RecorderPage onBack={() => setShowRecorder(false)} />}
       </View>
     </AppContext.Provider>
+    // <Text style={{ height: '100%', width: '100%' }}>abc</Text>
   );
 };

@@ -12,14 +12,6 @@ export interface MemberSearchResult {
   nickname: string;
 }
 
-export interface ChatMessage {
-  id: number;
-  type: 'text' | 'image' | 'video';
-  content: string; // Text content or URL for media
-  sender: 'user' | 'support';
-  timestamp: Date;
-}
-
 export interface CategoriesSpend {
   displayName: string;
   name: string;

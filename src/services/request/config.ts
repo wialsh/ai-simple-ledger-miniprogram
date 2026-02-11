@@ -13,5 +13,7 @@ if (isH5 && isDev) {
 
 export const BASE_URL = baseUrl;
 export const TIMEOUT = 5000;
+export const TARO_ENV = process.env.TARO_ENV || 'unknown';
+export const NODE_ENV = process.env.NODE_ENV || 'development';
 export const CLOUD_ENV = process.env.TARO_APP_CLOUD_ENV || '';
 export const X_WX_SERVICE = process.env.TARO_APP_X_WX_SERVICE || '';

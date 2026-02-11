@@ -1,10 +1,5 @@
 import { AxiosResponse } from 'axios';
-
-export interface Response<T> {
-  code: 0 | 1;
-  data: T;
-  msg: string;
-}
+import type { Response } from '@/types';
 
 // 1. 定义 ISO 8601 日期格式的正则
 // 匹配形如：2023-12-01T12:00:00Z 或 2023-12-01T12:00:00.000Z

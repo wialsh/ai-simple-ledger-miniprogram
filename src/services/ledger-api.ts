@@ -1,6 +1,6 @@
-import { Ledger, Budget } from '@/types';
+import type { Ledger, Budget, Response } from '@/types';
 import apiClient from './request';
-import { deserializer, type Response } from './request/deserialize';
+import { deserializer } from './request/deserialize';
 
 // ==============================
 // 账本 (Ledgers) - 增删改查

@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-// import { categoriesService } from '@/services/api';
+// import { categoriesService } from '@/services';
 import { Category } from '@/types';
 
 export const useAllCategories = () => {

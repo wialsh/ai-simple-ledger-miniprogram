@@ -2,6 +2,14 @@ const getYear = (date: Date) => date.getFullYear();
 const getMonth = (date: Date) => date.getMonth() + 1;
 const getDate = (date: Date) => date.getDate();
 
+const getTodayStr = (date?: Date) => {
+  if (date) {
+    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+  }
+  const now = new Date();
+  return `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+};
+
 const startOfMonth = (date: Date) => {
   return new Date(date.getFullYear(), date.getMonth(), 1);
 };
@@ -15,17 +23,11 @@ const isSameYear = (d1: Date, d2: Date) => {
 };
 
 const isSameMonth = (d1: Date, d2: Date) => {
-  return (
-    d1.getFullYear() === d2?.getFullYear() && d1.getMonth() === d2?.getMonth()
-  );
+  return d1.getFullYear() === d2?.getFullYear() && d1.getMonth() === d2?.getMonth();
 };
 
 const isSameDay = (d1: Date, d2: Date) => {
-  return (
-    d1.getFullYear() === d2.getFullYear() &&
-    d1.getMonth() === d2.getMonth() &&
-    d1.getDate() === d2.getDate()
-  );
+  return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
 };
 
 const dateDiff = (date1: Date, date2: Date) => {
@@ -53,15 +55,7 @@ const formatDate = (date: Date, formatStr: string): string => {
   } else if (formatStr === 'dd') {
     return `${day}日`;
   } else if (formatStr === 'MMM dd, EEEE') {
-    const days = [
-      '星期日',
-      '星期一',
-      '星期二',
-      '星期三',
-      '星期四',
-      '星期五',
-      '星期六',
-    ];
+    const days = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
     return `${month}月${day.padStart(2, '0')}日，${days[dayOfWeek]}`;
   } else if (formatStr === 'YYYY-MM-DD') {
     return `${year}年${month.padStart(2, '0')}月${day.padStart(2, '0')}日`;
@@ -73,6 +67,7 @@ export {
   getYear,
   getMonth,
   getDate,
+  getTodayStr,
   startOfMonth,
   endOfMonth,
   isSameYear,

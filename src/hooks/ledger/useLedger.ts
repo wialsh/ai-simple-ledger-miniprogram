@@ -1,9 +1,9 @@
 import { useState, useMemo, useEffect } from 'react';
-import { ledgersService } from '@/services/ledger-api';
+import { ledgersService } from '@/services';
+import { COLORS } from '@/styles/colors';
 import { UserProfile, Ledger, LedgerCategory, LedgerPick, Budget } from '@/types';
 
 export const useLedgers = (userProfile: UserProfile) => {
-  // const [currentLedger, setCurrentLedger] = useState<Ledger>({} as Ledger);
   const [allLedgers, setAllLedgers] = useState<Ledger[]>([]);
 
   const currentLedger = useMemo(() => {
@@ -32,7 +32,7 @@ export const useLedgers = (userProfile: UserProfile) => {
       name: ledgerName,
       desc: '',
       componentName: componentName,
-      componentColor: '#76BDB9',
+      componentColor: COLORS.primaryDark,
       ownerId: userProfile.id,
       ownerNickname: userProfile.nickname,
       ownerAvatar: userProfile.avatar,
@@ -87,7 +87,7 @@ export const useLedgers = (userProfile: UserProfile) => {
   /**
    * 选择账本
    */
-  const activateLedger = (ledgerId: number) => {
+  const selectLedger = (ledgerId: number) => {
     const selectedLedger = allLedgers.find(ledger => ledger.id === ledgerId);
 
     if (selectedLedger) {
@@ -153,7 +153,7 @@ export const useLedgers = (userProfile: UserProfile) => {
 
   return {
     currentLedger,
-    activateLedger,
+    selectLedger,
     updateLedgerBudgets,
     allLedgers,
     displayLedgers,

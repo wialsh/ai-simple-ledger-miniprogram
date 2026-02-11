@@ -1,10 +1,12 @@
 import { useState, useMemo, useEffect } from 'react';
-import { transactionService } from '@/services/ledger-api';
+import { transactionService } from '@/services';
 import * as dateUtils from '@/utils/dateUtils';
-import { Transaction, Ledger, UserProfile, LedgerCategory } from '@/types';
+import { Transaction, Ledger, LedgerCategory } from '@/types';
 
-export const useTransactions = (userProfile: UserProfile, ledger: Ledger, currentDate: Date) => {
+export const useTransactions = (ledger: Ledger, currentDate: Date) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchData = async () => {
     // await Promise.all
     const fetchedTransactions = await transactionService.getByLedgerId(ledger.id);
@@ -19,22 +21,29 @@ export const useTransactions = (userProfile: UserProfile, ledger: Ledger, curren
   }, [transactions, currentDate]);
 
   // 新增一笔消费
-  const addTransaction = (amount: number, recordDate: Date, remark: string, category: LedgerCategory) => {
+  const addTransaction = (
+    userId: number,
+    amount: number,
+    recordDate: Date,
+    remark: string,
+    category: LedgerCategory
+  ) => {
+    const now = new Date();
     const trans: Transaction = {
-      id: Date.now(),
+      transId: now.getTime(), //交易ID
       amount,
       remark,
       recordDate,
-      userId: userProfile.id,
+      userId: userId,
       ledgerId: ledger.id,
       ownerId: ledger.ownerId,
       categoryId: category.id,
       categoryName: category.name,
       componentName: category.componentName,
       componentColor: category.componentColor,
-      createdAt: new Date(),
-      updatedAt: new Date(),
       isDeleted: false,
+      createdAt: now,
+      updatedAt: now,
     };
 
     setTransactions(prev => [trans, ...prev]);
@@ -70,7 +79,7 @@ export const useTransactions = (userProfile: UserProfile, ledger: Ledger, curren
     if (ledger?.id) {
       fetchData();
     }
-  }, [ledger?.id]);
+  }, [fetchData, ledger?.id]);
   return {
     transactions,
     addTransaction,

@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
-import { ledgerSharingMembersService } from '@/services/ledger-api';
 import { LedgerSharingMember } from '@/types';
 
 export const useLedgerSharingMember = (ledgerId: number) => {
   const [ledgerSharingMembers, setLedgerSharingMembers] = useState<LedgerSharingMember[]>([]);
 
   const fetchData = async () => {
-    const fetchedUser = await ledgerSharingMembersService.getByLedgerId(ledgerId);
+    const fetchedUser = [];
     setLedgerSharingMembers(fetchedUser);
   };
 

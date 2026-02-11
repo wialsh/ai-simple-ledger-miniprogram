@@ -12,12 +12,12 @@ interface LedgersPageProps {
 }
 
 export const LedgersPage: React.FC<LedgersPageProps> = ({ onClose }) => {
-  const { activateLedger, displayLedgers, deleteLedger } = useContext(AppContext);
+  const { selectLedger, displayLedgers, deleteLedger } = useContext(AppContext);
   const [editingLedger, setEditingLedger] = useState<Ledger | null>(null);
   const [isCreatingLedger, setIsCreatingLedger] = useState(false);
 
   const handleSelectLedger = (ledgerId: number) => {
-    activateLedger(ledgerId);
+    selectLedger(ledgerId);
     // onClose(); // 通常选中后应该关闭列表，返回主页？根据业务逻辑决定
   };
 

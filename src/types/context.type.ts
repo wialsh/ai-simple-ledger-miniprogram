@@ -1,17 +1,16 @@
-import { LedgerPick } from './common.type';
-import {
+import type { LedgerPick } from './common.type';
+import type {
   Ledger,
   UserProfile,
   UserProfileUpdatable,
   Transaction,
-  TotalTransaction,
+  Budget,
   Category,
   LedgerCategory,
   LedgerSharingMember,
-  Bill,
   ChatMessage,
 } from './data.type';
-import { CategoriesSpend, TrendData } from './stat.type';
+import type { CategoriesSpend, TrendData, TotalTransaction } from './stat.type';
 
 export interface AppContextType {
   // 基础信息
@@ -32,8 +31,8 @@ export interface AppContextType {
 
   // 账本
   currentLedger: Ledger;
-  activateLedger: (ledgerId: number) => void;
-  updateLedgerBill: (updated: Bill) => void;
+  selectLedger: (ledgerId: number) => void;
+  updateLedgerBudget: (updated: Budget) => void;
   allLedgers: Ledger[];
   displayLedgers: Ledger[];
   createLedger: (ledgerName: string, componentName: string, ledgerCategories: LedgerCategory[]) => void;

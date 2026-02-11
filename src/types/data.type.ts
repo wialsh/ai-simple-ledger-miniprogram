@@ -7,9 +7,7 @@ export interface UserProfile {
   gender: number; //性别（1-男、2-女、0-未知（默认））
   avatar: string;
   isVip: number;
-  isDeleted: boolean; //是否删除
-  updatedAt: Date; //更新时间
-  createdAt: Date; //创建时间
+  token: string;
 }
 
 export interface UserProfileUpdatable {
@@ -21,7 +19,6 @@ export interface UserProfileUpdatable {
 }
 
 export interface Transaction {
-  id: number;
   transId: number; //交易ID
   amount: number; //交易金额
   remark: string; //备注
@@ -29,7 +26,7 @@ export interface Transaction {
   userId: number; //记录人ID
   ledgerId: number; //记录的账本ID
   ownerId: number; //记录的账本所有者ID
-  categoryId: string; //记录的账本的分类ID
+  categoryId: number; //记录的账本的分类ID
   categoryName: string; //记录的账本的分类名称（静态的）
   componentName: string; //记录的账本的分类的组件名称
   componentColor: string; //记录的账本的分类的组件颜色
@@ -108,4 +105,12 @@ export interface LedgerSharingMember {
   createdAt: Date; //创建时间
   updatedAt: Date; //更新时间
   isDeleted: boolean; //是否删除
+}
+
+export interface ChatMessage {
+  id: number;
+  type: 'text' | 'image' | 'video';
+  content: string; // Text content or URL for media
+  sender: 'user' | 'support';
+  timestamp: Date;
 }

@@ -1,6 +1,17 @@
 import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import Taro from '@tarojs/taro';
+import { storageService } from '../local/storage';
 import { BASE_URL, TIMEOUT } from './config';
+
+// 💡 1. 定义内存变量，初始化时读取一次本地存储
+let cachedToken: string | null = null;
+/**
+ * 💡 2. 提供一个手动更新内存 Token 的方法
+ * 供登录成功后调用
+ */
+export const setAuthToken = (token: string | null) => {
+  cachedToken = token;
+};
 
 const apiClient: AxiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -18,6 +29,8 @@ const apiClient: AxiosInstance = axios.create({
         url = `${baseURL}${subURL}`;
       }
 
+      // console.log('发起请求: ', config.method?.toUpperCase(), url, '数据:', config.data, '头部:', config.headers);
+
       // 2. 发起 Taro 请求
       Taro.request({
         url: url,
@@ -28,7 +41,7 @@ const apiClient: AxiosInstance = axios.create({
          * 在 Axios 中，如果请求没有设置特殊的 header，config.headers 可能会是 undefined。
          * 当你把它直接传给 Taro.request 时，就报错了
          */
-        header: config.headers || {}, // Axios 是 headers，Taro 是 header
+        header: config.headers.toJSON(), // Axios 是 headers，Taro 是 header
         success: res => {
           // 3. 构造 Axios 需要的响应结构
           const response: AxiosResponse = {
@@ -108,6 +121,53 @@ apiClient.interceptors.response.use(
       duration: 2000,
     });
 
+    return Promise.reject(error);
+  }
+);
+
+// --- 请求拦截器 ---
+apiClient.interceptors.request.use(
+  (config: InternalAxiosRequestConfig) => {
+    if (!cachedToken) {
+      setAuthToken(storageService.get<string>('token'));
+    }
+    // 如果存在 Token，补充到 Header 中
+    if (cachedToken) {
+      // 注意：Axios v1.x 推荐直接操作 config.headers 对象
+      // 这里的格式必须匹配后端拦截器的 substring(7) 逻辑：Bearer + 空格 + Token
+      config.headers.Authorization = `Bearer ${cachedToken}`;
+    }
+
+    console.log('cachedToken', cachedToken);
+    console.log(
+      '发起请求interceptors: ',
+      config.method?.toUpperCase(),
+      config.url,
+      '数据:',
+      config.data,
+      '头部:',
+      config.headers
+    );
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  }
+);
+
+// 响应拦截器
+apiClient.interceptors.response.use(
+  response => response,
+  error => {
+    const status = error.response?.status;
+    if (status === 401) {
+      // 💡 4. 发现 401 时同时清除内存和本地缓存
+      setAuthToken(null);
+      storageService.remove('token');
+      // Taro.showToast({ title: '登录已过期', icon: 'none' });
+    } else {
+      // Taro.showToast({ title: error.message || '网络异常', icon: 'none' });
+    }
     return Promise.reject(error);
   }
 );

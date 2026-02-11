@@ -1,6 +1,6 @@
-import { Transaction } from '@/types';
+import type { Transaction, Response } from '@/types';
 import apiClient from './request';
-import { deserializer, type Response } from './request/deserialize';
+import { deserializer } from './request/deserialize';
 
 // ==============================
 // 交易（Transactions）- 增删查
