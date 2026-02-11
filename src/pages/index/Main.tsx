@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import Taro from '@tarojs/taro';
+import Taro, { useDidHide, useLaunch } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { AppContext } from '@/context/AppContext';
 import { TabBar, RecorderPage, DetailsPage, ChartsPage, BillPage, MinePage } from '@/pages/core';
@@ -11,6 +11,7 @@ import {
   useStatLedgerBill,
   useChatMessage,
 } from '@/hooks';
+import { syncSendData } from '@/services';
 import * as dateUtils from '@/utils/dateUtils';
 import { COLORS } from '@/styles/colors';
 import type { Tab } from '@/types';
@@ -22,7 +23,8 @@ export const MainAppComponent: React.FC = () => {
   const [showRecorder, setShowRecorder] = useState(false);
 
   // --- Hooks ---
-  const currentDateStr = '2024-06-01'; // 固定日期，方便测试用户信息的缓存和更新逻辑
+  // const currentDateStr = '2024-06-01'; // 固定日期，方便测试用户信息的缓存和更新逻辑
+  const currentDateStr = dateUtils.getTodayStr(currentDate); // 固定日期，方便测试用户信息的缓存和更新逻辑
   const { userProfile, setUserProfile } = useUserProfile(currentDateStr);
 
   console.log('userProfile', userProfile);
@@ -148,6 +150,15 @@ export const MainAppComponent: React.FC = () => {
       setActiveTab(t);
     }
   };
+
+  // 全局监听切入后台
+  useDidHide(() => {
+    syncSendData('onHide');
+  });
+
+  useLaunch(() => {
+    syncSendData('onLaunch');
+  });
 
   return (
     <AppContext.Provider value={contextValue as any}>

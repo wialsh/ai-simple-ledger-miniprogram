@@ -1,6 +1,6 @@
 import type { Ledger, Budget, Response } from '@/types';
-import apiClient from './request';
-import { deserializer } from './request/deserialize';
+import apiClient from '../request';
+import { deserializer } from '../request/deserialize';
 
 // ==============================
 // 账本 (Ledgers) - 增删改查
@@ -21,9 +21,9 @@ export const ledgersService = {
   },
 
   // 创建或更新账本
-  save: async (ledger: Ledger) => {
-    const result = await apiClient.post<Ledger>('/ledgers', ledger);
-    return result;
+  save: async (ledgers: Ledger[]) => {
+    const result = await apiClient.post<Response<null>>('/ledgers', ledgers);
+    return result.data;
   },
 
   // 删除账本

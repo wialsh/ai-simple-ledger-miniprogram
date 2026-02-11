@@ -115,8 +115,8 @@ export const MinePage: React.FC = () => {
             boxShadow: `0 1px 2px 0 ${COLORS.mask2}`,
           }}
         >
-          <MenuItem icon='Book' label='账本管理（敬请期待）' onClick={() => setShowLedgers(true)} disabled />
-          <MenuItem icon='Users' label='账本共享（敬请期待）' onClick={() => setShowSharing(true)} disabled />
+          {/* <MenuItem icon='Book' label='账本管理（敬请期待）' onClick={() => setShowLedgers(true)} disabled /> */}
+          {/* <MenuItem icon='Users' label='账本共享（敬请期待）' onClick={() => setShowSharing(true)} disabled /> */}
         </View>
 
         {/* Menu Group 2 */}
@@ -129,7 +129,7 @@ export const MinePage: React.FC = () => {
           }}
         >
           <MenuItem icon='HelpCircle' label='帮助与反馈' onClick={() => setShowHelp(true)} />
-          <MenuItem icon='Settings' label='设置' onClick={() => setSetting(true)} />
+          {/* <MenuItem icon='Settings' label='设置' onClick={() => setSetting(true)} /> */}
         </View>
       </View>
 

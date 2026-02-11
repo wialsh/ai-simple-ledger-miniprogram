@@ -6,13 +6,13 @@ export const useStatLedgerBill = (currentDate: Date, currentLedger: Ledger) => {
   const monthlyBudget = useMemo(() => {
     const year = currentDate.getFullYear();
     const monthIndex = currentDate.getMonth();
-    const bills = currentLedger?.bills || [];
+    const bills = currentLedger?.budgets || [];
     if (bills) {
       const filteredBills = bills.find(b => b.year === year);
       return filteredBills?.amounts[monthIndex] || 0;
     }
     return 0;
-  }, [currentDate, currentLedger?.bills]);
+  }, [currentDate, currentLedger?.budgets]);
 
   return { monthlyBudget };
 };

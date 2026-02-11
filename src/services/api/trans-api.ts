@@ -1,6 +1,6 @@
 import type { Transaction, Response } from '@/types';
-import apiClient from './request';
-import { deserializer } from './request/deserialize';
+import apiClient from '../request';
+import { deserializer } from '../request/deserialize';
 
 // ==============================
 // 交易（Transactions）- 增删查
@@ -14,9 +14,9 @@ export const transactionService = {
   },
 
   // 保存交易
-  save: async (transaction: Transaction) => {
-    const result = await apiClient.post<Transaction>('/transactions', transaction);
-    return result;
+  save: async (transactions: Transaction[]) => {
+    const result = await apiClient.post<Response<null>>('/transactions', transactions);
+    return result.data;
   },
 
   // 删除交易

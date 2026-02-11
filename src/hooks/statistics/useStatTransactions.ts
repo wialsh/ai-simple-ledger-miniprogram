@@ -33,7 +33,7 @@ export const useStatTransactions = (monthlyTransactions: Transaction[]) => {
 
   // 统计分类信息
   const categoriesData = useMemo(() => {
-    const map = new Map<string, CategoriesSpend>();
+    const map = new Map<number, CategoriesSpend>();
     monthlyTransactions.forEach(t => {
       const statInfo = map.get(t.categoryId);
       if (statInfo) {

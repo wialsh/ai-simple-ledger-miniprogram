@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { transactionService } from '@/services';
+import { transactionService, storageService } from '@/services';
 import * as dateUtils from '@/utils/dateUtils';
 import { Transaction, Ledger, LedgerCategory } from '@/types';
 
@@ -47,6 +47,7 @@ export const useTransactions = (ledger: Ledger, currentDate: Date) => {
     };
 
     setTransactions(prev => [trans, ...prev]);
+    storageService.set(`transactions`, transactions);
   };
 
   /**

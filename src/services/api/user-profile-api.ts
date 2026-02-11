@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro';
 import type { UserProfile, Response } from '@/types';
-import { storageService } from './local/storage';
-import { CLOUD_ENV, X_WX_SERVICE } from './request/config';
+import { storageService } from '../local/storage';
+import { CLOUD_ENV, X_WX_SERVICE } from '../request/config';
 
 // --- 初始化云开发 (小程序端必须) ---
 if (process.env.TARO_ENV === 'weapp' && Taro.cloud) {

@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { ledgersService } from '@/services';
+import { ledgersService, storageService } from '@/services';
 import { COLORS } from '@/styles/colors';
 import { UserProfile, Ledger, LedgerCategory, LedgerPick, Budget } from '@/types';
 
@@ -124,6 +124,8 @@ export const useLedgers = (userProfile: UserProfile) => {
         return ledger;
       });
     });
+
+    storageService.set('ledgers', allLedgers);
   };
 
   /**
