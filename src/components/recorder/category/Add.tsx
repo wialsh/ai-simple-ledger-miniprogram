@@ -35,8 +35,8 @@ export const AddCategoryDialog: React.FC<AddCategoryDialogProps> = ({ maxCategor
       id: `custom-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       name: name,
       type: 0,
-      componentName: 'Bookmark',
-      componentColor: COLORS.primary,
+      iconName: 'Bookmark',
+      iconColor: COLORS.primary,
     }));
 
     const existingCategories = currentLedger.categories || [];

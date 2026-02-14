@@ -4,14 +4,10 @@ export type ClickType = 'Share' | 'ResetShareTime' | 'Member' | 'CancelShare' | 
 
 export type LedgerPick =
   | 'name'
-  | 'desc'
-  | 'componentName'
-  | 'componentColor'
-  | 'ownerNickname'
-  | 'ownerNickname'
-  | 'ownerAvatar'
+  | 'description'
+  | 'iconName'
+  | 'iconColor'
   | 'type'
   | 'isActived'
-  | 'shareStartTime'
   | 'categories'
   | 'budgets';

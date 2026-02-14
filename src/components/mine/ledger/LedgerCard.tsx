@@ -167,7 +167,7 @@ export const LedgerCard: React.FC<LedgerCardProps> = ({ ledger, onClick, onEdit,
             backgroundColor: COLORS.white,
           }}
         >
-          <Icon name={ledger.componentName} size={24} color={ledger.componentColor} />
+          <Icon name={ledger.iconName} size={24} color={ledger.iconColor} />
         </View>
 
         {/* Text Info */}

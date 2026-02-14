@@ -16,34 +16,34 @@ export const CategorySetupPage: React.FC<CategorySetupPageProps> = ({ onClose, i
   const [ledgerCategories, setLedgerCategories] = useState<LedgerCategory[]>(initLedger?.categories || []);
   const [mergedLedgerCategories, setMergedLedgerCategories] = useState<LedgerCategory[]>([]);
 
-  const [componentName, setComponentName] = useState<string | null>(null);
+  const [iconName, seticonName] = useState<string | null>(null);
   const [categoryNameInput, setCategoryNameInput] = useState('');
   const [showNameError, setShowNameError] = useState(false);
 
   const isEditing = !!initLedger;
 
-  const handleClickCategory = (clickComponentName: string) => {
-    setComponentName(clickComponentName);
-    const existing = ledgerCategories.find(c => c.componentName === clickComponentName);
+  const handleClickCategory = (clickiconName: string) => {
+    seticonName(clickiconName);
+    const existing = ledgerCategories.find(c => c.iconName === clickiconName);
     setCategoryNameInput(existing?.name || '');
   };
 
   const handleSaveLedgerCategory = () => {
     if (categoryNameInput.trim() === '') {
-      setLedgerCategories(prev => [...prev.filter(c => c.componentName !== componentName)]);
-    } else if (componentName) {
-      const existingCategory = ledgerCategories.find(c => c.componentName === componentName);
+      setLedgerCategories(prev => [...prev.filter(c => c.iconName !== iconName)]);
+    } else if (iconName) {
+      const existingCategory = ledgerCategories.find(c => c.iconName === iconName);
       const newCat: LedgerCategory = {
-        id: existingCategory?.id || componentName,
+        id: existingCategory?.id || iconName,
         name: categoryNameInput.trim().substring(0, 6),
         type: existingCategory?.type || 1,
-        componentName: componentName,
-        componentColor: existingCategory?.componentColor || '#76BDB9',
+        iconName: iconName,
+        iconColor: existingCategory?.iconColor || '#76BDB9',
       };
-      setLedgerCategories(prev => [...prev.filter(c => c.componentName !== componentName), newCat]);
+      setLedgerCategories(prev => [...prev.filter(c => c.iconName !== iconName), newCat]);
     }
 
-    setComponentName(null);
+    seticonName(null);
   };
 
   const handleSaveLedgerCategories = () => {
@@ -65,15 +65,15 @@ export const CategorySetupPage: React.FC<CategorySetupPageProps> = ({ onClose, i
   };
 
   useEffect(() => {
-    const categoryIds = new Set(ledgerCategories.map(item => item.id));
+    const iconNames = new Set(ledgerCategories.map(item => item.id));
     const remainingCategories: LedgerCategory[] = allCategories
-      .filter(c => !categoryIds.has(c.id))
+      .filter(c => !iconNames.has(c.id))
       .map(c => ({
         id: c.id,
         name: c.name,
         type: 0,
-        componentName: c.name,
-        componentColor: c.color,
+        iconName: c.name,
+        iconColor: c.color,
       }));
 
     const mergedAllCategories: LedgerCategory[] = [...ledgerCategories, ...remainingCategories];
@@ -249,7 +249,7 @@ export const CategorySetupPage: React.FC<CategorySetupPageProps> = ({ onClose, i
                 return (
                   <View
                     key={category.id}
-                    onClick={() => handleClickCategory(category.componentName)}
+                    onClick={() => handleClickCategory(category.iconName)}
                     style={{
                       width: itemWidth,
                       aspectRatio: '1 / 1', // 保持正方形
@@ -266,7 +266,7 @@ export const CategorySetupPage: React.FC<CategorySetupPageProps> = ({ onClose, i
                     }}
                   >
                     <Icon
-                      name={category.componentName}
+                      name={category.iconName}
                       size={20}
                       color={category.type !== 0 ? COLORS.black : COLORS.gray400}
                     />
@@ -279,7 +279,7 @@ export const CategorySetupPage: React.FC<CategorySetupPageProps> = ({ onClose, i
         </ScrollView>
 
         {/* Popup for Category Naming */}
-        {componentName && (
+        {iconName && (
           <View
             className='animate-slide-up'
             style={{
@@ -331,7 +331,7 @@ export const CategorySetupPage: React.FC<CategorySetupPageProps> = ({ onClose, i
                     justifyContent: 'center',
                   }}
                 >
-                  <Icon name={componentName} size={32} />
+                  <Icon name={iconName} size={32} />
                 </View>
               </View>
 
@@ -358,7 +358,7 @@ export const CategorySetupPage: React.FC<CategorySetupPageProps> = ({ onClose, i
 
               <View style={{ display: 'flex', flexDirection: 'row', gap: '12px' }}>
                 <View
-                  onClick={() => setComponentName(null)}
+                  onClick={() => seticonName(null)}
                   style={{
                     flex: 1,
                     padding: '12px',

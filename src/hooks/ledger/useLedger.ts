@@ -1,9 +1,11 @@
 import { useState, useMemo, useEffect } from 'react';
 import { ledgersService, storageService } from '@/services';
 import { COLORS } from '@/styles/colors';
-import { UserProfile, Ledger, LedgerCategory, LedgerPick, Budget } from '@/types';
+import { Ledger, LedgerCategory, LedgerPick, Budget } from '@/types';
+import { DEFAULT_LEDGER } from '../constants';
 
-export const useLedgers = (userProfile: UserProfile) => {
+export const useLedgers = (userId: number) => {
+  const [ledgerId, setLedgerId] = useState<number>(0);
   const [allLedgers, setAllLedgers] = useState<Ledger[]>([]);
 
   const currentLedger = useMemo(() => {
@@ -12,39 +14,34 @@ export const useLedgers = (userProfile: UserProfile) => {
 
   //展示账本（我的+分享）
   const displayLedgers = useMemo(() => {
-    return allLedgers.filter(ledger => !ledger.isDeleted);
+    return allLedgers;
   }, [allLedgers]);
 
   //我的账本
   const mineLedgers = useMemo(() => {
-    return allLedgers.filter(l => l.type !== 2 && !l.isDeleted);
+    return allLedgers.filter(l => l.type !== 2);
   }, [allLedgers]);
 
   //分享账本
   const joinedLedgers = useMemo(() => {
-    return allLedgers.filter(l => l.type === 2 && !l.isDeleted);
+    return allLedgers.filter(l => l.type === 2);
   }, [allLedgers]);
 
-  const createLedger = (ledgerName: string, componentName: string, ledgerCategories: LedgerCategory[]) => {
+  const createLedger = (ledgerName: string, iconName: string, ledgerCategories: LedgerCategory[]) => {
     const now = new Date();
     const added: Ledger = {
       id: now.getTime(),
       name: ledgerName,
-      desc: '',
-      componentName: componentName,
-      componentColor: COLORS.primaryDark,
-      ownerId: userProfile.id,
-      ownerNickname: userProfile.nickname,
-      ownerAvatar: userProfile.avatar,
+      description: '',
+      iconName: iconName,
+      iconColor: COLORS.primaryDark,
+      ownerId: userId,
       type: 1,
-      userId: userProfile.id,
+      userId: userId,
       isActived: true,
       joiningTime: now,
       shareStartTime: now,
       categories: ledgerCategories,
-      createdAt: now,
-      updatedAt: now,
-      isDeleted: false,
     };
 
     addLedger(added);
@@ -54,29 +51,27 @@ export const useLedgers = (userProfile: UserProfile) => {
     setAllLedgers(prev => [...prev, added]);
   };
 
-  const updateLedger = (ledgerId, updates: Partial<Pick<Ledger, LedgerPick>>) => {
+  const updateLedger = (id: number, updates: Partial<Pick<Ledger, LedgerPick>>) => {
     setAllLedgers(ledgers => {
-      return ledgers.map(ledger =>
-        ledger.id !== ledgerId ? ledger : { ...ledger, ...updates, updatedAt: new Date() }
-      );
+      return ledgers.map(ledger => (ledger.id !== id ? ledger : { ...ledger, ...updates, updatedAt: new Date() }));
     });
   };
 
-  const deleteLedger = (ledgerId: number) => {
-    if (ledgerId) {
+  const deleteLedger = (id: number) => {
+    if (id) {
       setAllLedgers(prev =>
         prev.map(ledger => {
-          return ledger.id === ledgerId ? { ...ledger, isDeleted: true } : { ...ledger };
+          return ledger.id === id ? { ...ledger, isDeleted: true } : { ...ledger };
         })
       );
     }
   };
 
-  const deleteLedgerCategory = (categoryId: string) => {
+  const deleteLedgerCategory = (iconName: string) => {
     setAllLedgers(prev =>
       prev.map(ledger => {
         if (ledger.id === currentLedger.id) {
-          const updatedCategories = ledger.categories?.filter(cat => cat.catId !== categoryId) || [];
+          const updatedCategories = ledger.categories?.filter(cat => cat.iconName !== iconName) || [];
           return { ...ledger, categories: updatedCategories };
         }
         return ledger;
@@ -87,13 +82,13 @@ export const useLedgers = (userProfile: UserProfile) => {
   /**
    * 选择账本
    */
-  const selectLedger = (ledgerId: number) => {
-    const selectedLedger = allLedgers.find(ledger => ledger.id === ledgerId);
+  const selectLedger = (id: number) => {
+    const selectedLedger = allLedgers.find(ledger => ledger.id === id);
 
     if (selectedLedger) {
       setAllLedgers(prev =>
         prev.map(ledger => {
-          return ledger.id === ledgerId ? { ...ledger, isActived: true } : { ...ledger, isActived: false };
+          return ledger.id === id ? { ...ledger, isActived: true } : { ...ledger, isActived: false };
         })
       );
     }
@@ -124,8 +119,6 @@ export const useLedgers = (userProfile: UserProfile) => {
         return ledger;
       });
     });
-
-    storageService.set('ledgers', allLedgers);
   };
 
   /**
@@ -133,9 +126,8 @@ export const useLedgers = (userProfile: UserProfile) => {
    */
   useEffect(() => {
     const initLedgers = async () => {
-      if (!userProfile?.id) return;
-
-      const fetchedLedgers = await ledgersService.getByUserId(userProfile.id);
+      if (!userId) return;
+      const fetchedLedgers = await ledgersService.getByUserId(userId);
 
       if (fetchedLedgers && fetchedLedgers.length > 0) {
         const initCurrentLedger = fetchedLedgers.find(l => l.isActived) || fetchedLedgers[0];
@@ -147,13 +139,34 @@ export const useLedgers = (userProfile: UserProfile) => {
               : { ...ledger, isActived: false };
           })
         );
+        return;
+      }
+
+      const cachedLedger = storageService.get<Ledger[]>('ledgers');
+      if (cachedLedger && cachedLedger.length > 0) {
+        setAllLedgers(cachedLedger);
+      } else {
+        // 没有账本，创建一个默认账本
+        setAllLedgers([DEFAULT_LEDGER]);
       }
     };
 
     initLedgers();
-  }, [userProfile?.id]);
+  }, [userId]);
+
+  useEffect(() => {
+    if (allLedgers.length > 0) {
+      storageService.set('ledgers', allLedgers);
+      allLedgers
+        .filter(l => l.isActived)
+        .forEach(l => {
+          setLedgerId(l.id);
+        });
+    }
+  }, [allLedgers]);
 
   return {
+    ledgerId,
     currentLedger,
     selectLedger,
     updateLedgerBudgets,

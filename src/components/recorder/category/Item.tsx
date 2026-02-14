@@ -70,7 +70,7 @@ export const CategoryItem = React.memo(
             flexShrink: 0,
           }}
         >
-          <Icon name={cat.componentName} size={20} color={cat.componentColor} />
+          <Icon name={cat.iconName} size={20} color={cat.iconColor} />
         </View>
         <Text style={{ flex: 1, fontWeight: 500, color: '#1f2937', fontSize: '16px' }}>{cat.name}</Text>
 

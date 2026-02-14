@@ -25,11 +25,12 @@ export const MainAppComponent: React.FC = () => {
   // --- Hooks ---
   // const currentDateStr = '2024-06-01'; // 固定日期，方便测试用户信息的缓存和更新逻辑
   const currentDateStr = dateUtils.getTodayStr(currentDate); // 固定日期，方便测试用户信息的缓存和更新逻辑
-  const { userProfile, setUserProfile } = useUserProfile(currentDateStr);
+  const { userId, userProfile, setUserProfile } = useUserProfile(currentDateStr);
 
   console.log('userProfile', userProfile);
 
   const {
+    ledgerId,
     currentLedger,
     selectLedger,
     updateLedgerBudgets,
@@ -42,7 +43,7 @@ export const MainAppComponent: React.FC = () => {
     mineLedgers,
     joinedLedgers,
     deleteLedgerCategory,
-  } = useLedgers(userProfile);
+  } = useLedgers(userId);
 
   const { transactions, addTransaction, monthlyTransactions, dailyTotalTransactions } = useTransactions(
     currentLedger,

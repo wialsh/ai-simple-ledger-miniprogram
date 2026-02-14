@@ -8,7 +8,7 @@ import { deserializer } from '../request/deserialize';
 export const transactionService = {
   // 获取指定账本的交易
   getByLedgerId: async (ledgerId: number) => {
-    const response = await apiClient.get<Response<Transaction[]>>(`/transactions/listByLedger/${ledgerId}`);
+    const response = await apiClient.get<Response<Transaction[]>>(`/transactions/byLedger/${ledgerId}`);
     const result = deserializer<Transaction[]>(response);
     return result;
   },

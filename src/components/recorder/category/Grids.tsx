@@ -1,17 +1,17 @@
 import React from 'react';
 import { View, Text } from '@tarojs/components';
-import { Icon } from '@/components/ui';
+import { Icon, DynamicIcon } from '@/components/ui';
 import type { LedgerCategory } from '@/types';
 import { COLORS } from '@/styles/colors';
 
 interface CategoriesGridsProps {
-  selectedCatId: string;
+  selectediconName: string;
   categories: LedgerCategory[];
-  onClick: (catId: string) => void;
+  onClick: (iconName: string) => void;
   onEdit: () => void;
 }
 
-export const CategoriesGrids: React.FC<CategoriesGridsProps> = ({ selectedCatId, categories, onClick, onEdit }) => {
+export const CategoriesGrids: React.FC<CategoriesGridsProps> = ({ selectediconName, categories, onClick, onEdit }) => {
   return (
     <View
       style={{
@@ -23,12 +23,12 @@ export const CategoriesGrids: React.FC<CategoriesGridsProps> = ({ selectedCatId,
       }}
     >
       {categories.map(cat => {
-        const isSelected = selectedCatId === cat.id;
+        const isSelected = selectediconName === cat.iconName;
 
         return (
           <View
-            key={cat.id}
-            onClick={() => onClick(cat.id)}
+            key={cat.iconName}
+            onClick={() => onClick(cat.iconName)}
             style={{
               // 模拟 grid-cols-4：每个元素宽度 25%
               width: '25%', // 5列布局 (100/5)
@@ -56,7 +56,7 @@ export const CategoriesGrids: React.FC<CategoriesGridsProps> = ({ selectedCatId,
               }}
             >
               <Icon
-                name={cat.componentName}
+                name={cat.iconName}
                 size={20}
                 // 直接传颜色属性，而不是 className
                 color={isSelected ? COLORS.white : COLORS.gray500}
@@ -104,7 +104,7 @@ export const CategoriesGrids: React.FC<CategoriesGridsProps> = ({ selectedCatId,
             boxSizing: 'border-box', // 确保边框不撑大尺寸
           }}
         >
-          <Icon name='Settings' size={20} color={COLORS.gray500} />
+          <DynamicIcon name='Settings' size={20} color={COLORS.gray500} />
         </View>
         <Text style={{ fontSize: '12px', color: COLORS.gray500 }}>自定义</Text>
       </View>

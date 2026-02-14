@@ -1,10 +1,11 @@
 import React, { useState, useContext } from 'react';
-import { View, Text } from '@tarojs/components';
+import { View } from '@tarojs/components';
 import { AppContext } from '@/context/AppContext';
 import { WindowsCustom } from '@/components';
 import { InputAreaModal, CategoriesGrids, CategorySettingsPage } from '@/components/recorder';
-import { LedgerCategory } from '@/types';
+import { DEFAULT_LEDGER } from '@/hooks/constants';
 import { COLORS } from '@/styles/colors';
+import { LedgerCategory } from '@/types';
 
 interface RecorderPageProps {
   onBack: () => void;
@@ -12,15 +13,15 @@ interface RecorderPageProps {
 
 export const RecorderPage: React.FC<RecorderPageProps> = ({ onBack }) => {
   const { addTransaction, currentLedger } = useContext(AppContext);
-  const [selectedCatId, setSelectedCatId] = useState<string>('');
+  const [selectediconName, setSelectediconName] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<LedgerCategory>();
-
-  const categories = currentLedger?.categories || [];
+  // 如果 currentLedger 没有 categories，使用默认账本的 categories
+  const categories = currentLedger?.categories || DEFAULT_LEDGER.categories;
   const [showSettings, setShowSettings] = useState(false);
 
-  const handleClickCategory = (catId: string) => {
-    setSelectedCatId(catId);
-    setSelectedCategory(categories.find(cat => cat.id === catId));
+  const handleClickCategory = (iconName: string) => {
+    setSelectediconName(iconName);
+    setSelectedCategory(categories.find(cat => cat.iconName === iconName));
   };
 
   const handleSubmit = (amount: number, recordDate: Date, remark: string) => {
@@ -52,7 +53,7 @@ export const RecorderPage: React.FC<RecorderPageProps> = ({ onBack }) => {
         flexDirection: 'column', // 垂直排列
       }}
       bottom={
-        selectedCatId ? (
+        selectediconName ? (
           <View style={{ flexShrink: 0 }}>
             {/* Input Area */}
             {/* 只有选中分类后才显示输入区域 */}
@@ -64,7 +65,7 @@ export const RecorderPage: React.FC<RecorderPageProps> = ({ onBack }) => {
       {/* Category Grid */}
       {/* 分类网格 (自适应高度，flex: 1 在组件内部) */}
       <CategoriesGrids
-        selectedCatId={selectedCatId}
+        selectediconName={selectediconName}
         categories={categories}
         onClick={handleClickCategory}
         onEdit={() => setShowSettings(true)}

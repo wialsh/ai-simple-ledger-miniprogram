@@ -35,13 +35,13 @@ export interface AppContextType {
   updateLedgerBudget: (updated: Budget) => void;
   allLedgers: Ledger[];
   displayLedgers: Ledger[];
-  createLedger: (ledgerName: string, componentName: string, ledgerCategories: LedgerCategory[]) => void;
+  createLedger: (ledgerName: string, iconName: string, ledgerCategories: LedgerCategory[]) => void;
   addLedger: (t: Ledger) => void;
   updateLedger: (ledgerId: number, updates: Partial<Pick<Ledger, LedgerPick>>) => void;
   deleteLedger: (ledgerId: number) => void;
   mineLedgers: Ledger[];
   joinedLedgers: Ledger[];
-  deleteLedgerCategory: (categoryId: string) => void;
+  deleteLedgerCategory: (iconName: string) => void;
 
   //账本成员
   ledgerSharingMembers: LedgerSharingMember[];

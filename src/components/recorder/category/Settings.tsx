@@ -259,7 +259,7 @@ export const CategorySettingsPage: React.FC<CategorySettingsPageProps> = ({ onBa
                   marginRight: '12px',
                 }}
               >
-                <Icon name={localCategories[dragIndex].componentName} size={20} color={COLORS.gray600} />
+                <Icon name={localCategories[dragIndex].iconName} size={20} color={COLORS.gray600} />
               </View>
               <Text style={{ flex: 1, fontWeight: 500, color: COLORS.gray800, fontSize: '16px' }}>
                 {localCategories[dragIndex].name}

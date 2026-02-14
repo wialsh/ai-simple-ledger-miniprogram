@@ -26,10 +26,8 @@ export interface Transaction {
   userId: number; //记录人ID
   ledgerId: number; //记录的账本ID
   ownerId: number; //记录的账本所有者ID
-  categoryId: number; //记录的账本的分类ID
-  categoryName: string; //记录的账本的分类名称（静态的）
-  componentName: string; //记录的账本的分类的组件名称
-  componentColor: string; //记录的账本的分类的组件颜色
+  iconName: string; //交易分类名称（静态的）
+  iconColor: string; //交易分类颜色（静态的）
   isDeleted: boolean; //是否删除
   createdAt: Date; //创建时间
   updatedAt: Date; //更新时间
@@ -38,12 +36,10 @@ export interface Transaction {
 export interface Ledger {
   id: number; //账本ID
   name: string; //账本名称
-  desc: string; //账本描述
-  componentName: string; //账本的组件名称
-  componentColor: string; //账本的组件颜色
+  description: string; //账本描述
+  iconName: string; //账本的组件名称
+  iconColor: string; //账本的组件颜色
   ownerId: number; //账本所有者ID
-  ownerNickname: string; //账本所有者名称
-  ownerAvatar: string; //账本所有者头像
   userId: number; //账本成员ID（当type=1时，ownerId等于userId）
   type: number; //账本类型（自己创建未分享（默认）-0、自己创建已分享-1、他人分享-2）
   isActived: boolean; //账本是否激活（被选中）
@@ -51,25 +47,21 @@ export interface Ledger {
   shareStartTime: Date; //可协同的开始时间
   categories: LedgerCategory[];
   budgets?: Budget[];
-  createdAt: Date; //创建时间
-  updatedAt: Date; //更新时间
-  isDeleted: boolean; //是否删除
 }
 
 export interface LedgerCategory {
-  id: number;
-  // ledgerId: number; //账本ID
-  catId: string; //分类ID
+  // id: number; //分类ID（数据库自增ID，前端不使用）
+  // ledgerId: number; //账本ID（数据库外键，前端不使用）
   name: string; //分类名称（中文）
   type: number; //分类的类型(0-未设置（默认）,1-支出，2-收入)
-  componentName: string; //分类组件名称
-  componentColor: string; //分类组件颜色
+  iconName: string; //分类ID
+  iconColor: string; //分类组件颜色
 }
 
 export interface Category {
-  id: string; //分类ID
-  name: string; //分类名称（ComponentName）
-  color: string; //分类icon颜色（ComponentColor）
+  id: number; //分类ID
+  name: string; //分类名称（iconName）
+  color: string; //分类icon颜色（iconColor）
   createdAt: Date; //创建时间
   updatedAt: Date; //更新时间
   isDeleted: boolean; //是否删除

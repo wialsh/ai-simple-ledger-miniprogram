@@ -37,7 +37,7 @@ export const TransCardModal: React.FC<TransCardModalProps> = ({ transaction, isL
           marginRight: '12px',
         }}
       >
-        <Icon name={transaction.componentName} size={20} color={transaction.componentColor} />
+        <Icon name={transaction.iconName} size={20} color={transaction.iconColor} />
       </View>
 
       {/* Content Text */}

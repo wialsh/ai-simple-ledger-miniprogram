@@ -35,22 +35,22 @@ export const useStatTransactions = (monthlyTransactions: Transaction[]) => {
   const categoriesData = useMemo(() => {
     const map = new Map<number, CategoriesSpend>();
     monthlyTransactions.forEach(t => {
-      const statInfo = map.get(t.categoryId);
+      const statInfo = map.get(t.iconName);
       if (statInfo) {
         statInfo.amount += t.amount;
-        map.set(t.categoryId, statInfo);
+        map.set(t.iconName, statInfo);
       } else {
-        map.set(t.categoryId, {
+        map.set(t.iconName, {
           displayName: t.categoryName,
-          name: t.componentName,
-          color: t.componentColor,
+          name: t.iconName,
+          color: t.iconColor,
           amount: t.amount,
         });
       }
     });
     // entries获取所有键值对（[key, value]）迭代器
     return Array.from(map.entries())
-      .map(([categoryId, statInfo]) => {
+      .map(([iconName, statInfo]) => {
         return statInfo;
       })
       .sort((a, b) => b.amount - a.amount);

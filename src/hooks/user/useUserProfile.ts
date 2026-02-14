@@ -4,7 +4,7 @@ import { UserProfile } from '@/types';
 // import * as dateUtils from '@/utils/dateUtils';
 
 export const useUserProfile = (currentDateStr: string) => {
-  // const [userProfile, setUserProfile] = useState<UserProfile>();
+  const [userId, setUserId] = useState<number>(0);
   const [userProfile, setUserProfile] = useState<UserProfile>({
     id: 0,
     account: '',
@@ -59,5 +59,11 @@ export const useUserProfile = (currentDateStr: string) => {
     fetchUserProfile();
   }, [currentDateStr]);
 
-  return { userProfile, setUserProfile };
+  useEffect(() => {
+    if (userProfile?.id) {
+      setUserId(userProfile.id);
+    }
+  }, [userProfile?.id]);
+
+  return { userId, userProfile, setUserProfile };
 };
