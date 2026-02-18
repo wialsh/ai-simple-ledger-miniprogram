@@ -4,7 +4,7 @@ import { AppContext } from '@/context/AppContext';
 import { WindowsCustom, Icon } from '@/components';
 import type { LedgerCategory } from '@/types';
 import { COLORS } from '@/styles/colors';
-import { AddCategoryDialog } from './Add';
+import { AddCategoryDialog } from './AddDialog';
 import { CategoryItem } from './Item';
 
 interface CategorySettingsPageProps {
@@ -17,10 +17,9 @@ const SCROLL_ZONE = 80; // 上下边缘 80px 触发滚动
 const SCROLL_SPEED = 15; // 滚动速度
 
 export const CategorySettingsPage: React.FC<CategorySettingsPageProps> = ({ onBack }) => {
-  const { currentLedger, deleteLedgerCategory, updateLedger } = useContext(AppContext);
+  const { categories, deleteLedgerCategory, updateLedgerCategories } = useContext(AppContext);
   const [showAdd, setShowAdd] = useState(false);
   const [localCategories, setLocalCategories] = useState<LedgerCategory[]>([]);
-  const [maxCategories, setMaxCategories] = useState(1000);
 
   // --- 拖拽状态 ---
   const [isDragging, setIsDragging] = useState(false);
@@ -36,13 +35,15 @@ export const CategorySettingsPage: React.FC<CategorySettingsPageProps> = ({ onBa
   const scrollViewHeightRef = useRef(0);
   const scrollIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
+  // console.log('CategorySettingsPage 渲染', { ledgerInfo, localCategories, isDragging, dragIndex, scrollTop });
+
   useEffect(() => {
-    setLocalCategories(currentLedger.categories || []);
-  }, [currentLedger.categories]);
+    setLocalCategories(categories || []);
+  }, [categories]);
 
   useEffect(() => {
     setAreaHeight(localCategories.length * ITEM_HEIGHT);
-    setMaxCategories(localCategories.length > 0 && localCategories.length <= 1000 ? localCategories.length : 1000);
+    // setMaxCategories(localCategories.length > 0 && localCategories.length <= 1000 ? localCategories.length : 1000);
   }, [localCategories]);
 
   const handleScroll = (e: any) => {
@@ -123,8 +124,10 @@ export const CategorySettingsPage: React.FC<CategorySettingsPageProps> = ({ onBa
     setIsDragging(false);
     setDragIndex(-1);
     stopAutoScroll();
-    updateLedger(currentLedger.id, { ...currentLedger, categories: localCategories });
+    updateLedgerCategories(localCategories);
   };
+
+  console.log('CategorySettingsPage 渲染', { localCategories });
 
   return (
     <View>
@@ -193,12 +196,12 @@ export const CategorySettingsPage: React.FC<CategorySettingsPageProps> = ({ onBa
             paddingBottom: '100px', // 底部留白，防止紧贴底部
           }}
         >
-          {localCategories.map((cat, index) => (
+          {localCategories.map((category, index) => (
             // 使用 React.memo 优化的组件
             <CategoryItem
-              key={cat.id}
+              key={category.catId}
               index={index}
-              cat={cat}
+              category={category}
               onLongPress={handleLongPress}
               onDelete={deleteLedgerCategory}
               isHidden={isDragging && index === dragIndex}
@@ -274,7 +277,7 @@ export const CategorySettingsPage: React.FC<CategorySettingsPageProps> = ({ onBa
         <View style={{ height: '100px' }} />
       </WindowsCustom>
 
-      {showAdd && <AddCategoryDialog maxCategories={maxCategories} onClose={() => setShowAdd(false)} />}
+      {showAdd && <AddCategoryDialog onClose={() => setShowAdd(false)} />}
     </View>
   );
 };

@@ -1,4 +1,4 @@
-export { LedgersPage } from './ledger/LedgersPage';
+export * from './ledger';
 export { LedgerSharePage } from './share/SharePage';
 export { UserProfilePage } from './user/UserProfilePage';
 export * from './setting';

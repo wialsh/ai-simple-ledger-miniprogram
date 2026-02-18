@@ -12,7 +12,7 @@ export const DetailsPage: React.FC = () => {
 
   return (
     // 最外层容器：全屏高度，flex-col
-    <WindowsCustom showNavBar showTopBar>
+    <WindowsCustom showNavBar>
       {dailyTotalTransactions.length === 0 ? (
         <TransEmptyModal />
       ) : (
@@ -40,7 +40,7 @@ export const DetailsPage: React.FC = () => {
             {/* Transactions Items */}
             {dailyTransGroup.items.map((dailyTrans, itemIdx) => {
               const isLastItem = itemIdx === dailyTransGroup.items.length - 1;
-              return <TransCardModal key={dailyTrans.id} transaction={dailyTrans} isLastItem={isLastItem} />;
+              return <TransCardModal key={dailyTrans.transId} transaction={dailyTrans} isLastItem={isLastItem} />;
             })}
           </View>
         ))

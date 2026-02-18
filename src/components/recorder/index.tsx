@@ -1,3 +1,2 @@
-export { CategoriesGrids } from './category';
-export { CategorySettingsPage } from './category';
-export { InputAreaModal } from './input-area';
+export * from './category';
+export * from './input-area';

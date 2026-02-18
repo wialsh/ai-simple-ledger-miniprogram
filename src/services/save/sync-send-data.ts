@@ -1,35 +1,40 @@
-import { ledgersService, transactionService, storageService } from '@/services';
-import { Ledger, Transaction } from '@/types';
+import { ledgerInfoService, ledgerCategoriesService, ledgerBudgetsService, transactionsService2 } from '@/services/api';
 
-export const syncSendData = async (sendWay: 'onHide' | 'onLaunch' = 'onHide') => {
+export const syncSendTransactionsData = async (sendWay: 'onHide' | 'onLaunch' = 'onHide') => {
   try {
-    // 注意：在 onHide 里执行异步请求，时间非常短（约 5 秒）
-    // 微信会尽可能保证请求发出，但不保证一定能收到回包
-
-    const transactions = storageService.get<Transaction[]>('transactions');
-    if (transactions && transactions.length > 0) {
-      const result = await transactionService.save(transactions);
-      if (result.code !== 0) {
-        console.error('交易同步失败:', result.msg, transactions);
-      } else {
-        console.log('交易同步成功');
-        // 同步成功后清除本地缓存
-        if (sendWay === 'onHide') {
-          storageService.remove('transactions');
-        }
+    const transactions = transactionsService2.getFromLocal();
+    if (transactions?.length > 0) {
+      console.log('发现本地未同步的交易数据，正在同步...', transactions);
+      await transactionsService2.save(transactions, true);
+      console.log('交易数据同步成功。');
+      // 同步成功后清除本地缓存
+      if (sendWay === 'onHide') {
+        // transactionsService.clearLocal();
       }
     }
+  } catch (e) {
+    console.error('同步失败，数据保留在本地下次重试', e);
+  }
+};
 
-    const ledgers = storageService.get<Ledger[]>('ledgers');
-    if (ledgers && ledgers.length > 0) {
-      const result = await ledgersService.save(ledgers);
-      if (result.code !== 0) {
-        console.error('账本同步失败:', result.msg, ledgers);
+export const syncSendLedgerData = async (userId: number, sendWay: 'onHide' | 'onLaunch' = 'onHide') => {
+  try {
+    const { ledgerInfo } = ledgerInfoService.getFromLocal(userId);
+    const { categories } = ledgerCategoriesService.getFromLocal();
+    const { budgets } = ledgerBudgetsService.getFromLocal();
+    if (ledgerInfo?.id) {
+      console.log('发现本地未同步的账本数据，正在同步...', { ledgerInfo, categories, budgets });
+      const result = await ledgerInfoService.save(ledgerInfo);
+      const result2 = await ledgerCategoriesService.save(ledgerInfo.id, categories);
+      const result3 = await ledgerBudgetsService.save(ledgerInfo.id, budgets);
+
+      if (result?.code !== 0 || result2?.code !== 0 || result3?.code !== 0) {
+        console.error('账本信息同步失败:', result?.msg || result2?.msg || result3?.msg, ledgerInfo);
       } else {
-        console.log('账本同步成功:', result);
+        console.log('账本同步成功。');
         // 同步成功后清除本地缓存
         if (sendWay === 'onHide') {
-          storageService.remove('ledgers');
+          // ledgerService.clearLocal();
         }
       }
     }

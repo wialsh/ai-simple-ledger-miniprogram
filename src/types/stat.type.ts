@@ -14,9 +14,9 @@ export interface MemberSearchResult {
 
 export interface CategoriesSpend {
   displayName: string;
-  name: string;
-  color: string;
-  amount: number;
+  iconName: string;
+  iconColor: string;
+  transAmount: number;
 }
 
 export interface TrendData {

@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import Taro from '@tarojs/taro';
-import { storageService } from '../local/storage';
+import { storageService } from '../storage/storage';
 import { BASE_URL, TIMEOUT } from './config';
 
 // 💡 1. 定义内存变量，初始化时读取一次本地存储
@@ -114,12 +114,12 @@ apiClient.interceptors.response.use(
     }
 
     // 提示错误信息 (Taro 环境建议用 Taro.showToast)
-    // console.error(message);
-    Taro.showToast({
-      title: message,
-      icon: 'none',
-      duration: 2000,
-    });
+    console.error(message);
+    // Taro.showToast({
+    //   title: message,
+    //   icon: 'none',
+    //   duration: 2000,
+    // });
 
     return Promise.reject(error);
   }
@@ -129,7 +129,7 @@ apiClient.interceptors.response.use(
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     if (!cachedToken) {
-      setAuthToken(storageService.get<string>('token'));
+      setAuthToken(storageService.get<string>('token') || null);
     }
     // 如果存在 Token，补充到 Header 中
     if (cachedToken) {
@@ -138,16 +138,16 @@ apiClient.interceptors.request.use(
       config.headers.Authorization = `Bearer ${cachedToken}`;
     }
 
-    console.log('cachedToken', cachedToken);
-    console.log(
-      '发起请求interceptors: ',
-      config.method?.toUpperCase(),
-      config.url,
-      '数据:',
-      config.data,
-      '头部:',
-      config.headers
-    );
+    // console.log('cachedToken', cachedToken);
+    // console.log(
+    //   '发起请求interceptors: ',
+    //   config.method?.toUpperCase(),
+    //   config.url,
+    //   '数据:',
+    //   config.data,
+    //   '头部:',
+    //   config.headers
+    // );
     return config;
   },
   error => {

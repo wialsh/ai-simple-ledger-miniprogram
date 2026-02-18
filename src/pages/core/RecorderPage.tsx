@@ -3,7 +3,6 @@ import { View } from '@tarojs/components';
 import { AppContext } from '@/context/AppContext';
 import { WindowsCustom } from '@/components';
 import { InputAreaModal, CategoriesGrids, CategorySettingsPage } from '@/components/recorder';
-import { DEFAULT_LEDGER } from '@/hooks/constants';
 import { COLORS } from '@/styles/colors';
 import { LedgerCategory } from '@/types';
 
@@ -12,16 +11,15 @@ interface RecorderPageProps {
 }
 
 export const RecorderPage: React.FC<RecorderPageProps> = ({ onBack }) => {
-  const { addTransaction, currentLedger } = useContext(AppContext);
-  const [selectediconName, setSelectediconName] = useState<string>('');
+  const { addTransaction, categories } = useContext(AppContext);
+  const [selectedCatId, setSelectedCatId] = useState<number>(0);
   const [selectedCategory, setSelectedCategory] = useState<LedgerCategory>();
-  // 如果 currentLedger 没有 categories，使用默认账本的 categories
-  const categories = currentLedger?.categories || DEFAULT_LEDGER.categories;
+
   const [showSettings, setShowSettings] = useState(false);
 
-  const handleClickCategory = (iconName: string) => {
-    setSelectediconName(iconName);
-    setSelectedCategory(categories.find(cat => cat.iconName === iconName));
+  const handleClickCategory = (catId: number) => {
+    setSelectedCatId(catId);
+    setSelectedCategory(categories?.find(cat => cat.catId === catId));
   };
 
   const handleSubmit = (amount: number, recordDate: Date, remark: string) => {
@@ -53,7 +51,7 @@ export const RecorderPage: React.FC<RecorderPageProps> = ({ onBack }) => {
         flexDirection: 'column', // 垂直排列
       }}
       bottom={
-        selectediconName ? (
+        selectedCatId ? (
           <View style={{ flexShrink: 0 }}>
             {/* Input Area */}
             {/* 只有选中分类后才显示输入区域 */}
@@ -65,7 +63,7 @@ export const RecorderPage: React.FC<RecorderPageProps> = ({ onBack }) => {
       {/* Category Grid */}
       {/* 分类网格 (自适应高度，flex: 1 在组件内部) */}
       <CategoriesGrids
-        selectediconName={selectediconName}
+        selectedCatId={selectedCatId}
         categories={categories}
         onClick={handleClickCategory}
         onEdit={() => setShowSettings(true)}

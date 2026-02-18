@@ -1,18 +1,20 @@
-import React, { useState, useMemo } from 'react';
-import Taro, { useDidHide, useLaunch } from '@tarojs/taro';
-import { View, Text } from '@tarojs/components';
+import React, { useState, useMemo, useEffect } from 'react';
+import Taro, { useDidHide } from '@tarojs/taro';
+import { View, Text, ITouchEvent } from '@tarojs/components';
 import { AppContext } from '@/context/AppContext';
 import { TabBar, RecorderPage, DetailsPage, ChartsPage, BillPage, MinePage } from '@/pages/core';
+import { LedgerDescriptionDialog } from '@/components/recorder';
 import {
   useUserProfile,
-  useLedgers,
+  useLedgerInfo,
+  useLedgerCategories,
+  useLedgerBudgets,
   useTransactions,
   useStatTransactions,
   useStatLedgerBill,
   useChatMessage,
 } from '@/hooks';
-import { syncSendData } from '@/services';
-import * as dateUtils from '@/utils/dateUtils';
+import { syncSendTransactionsData, syncSendLedgerData } from '@/services';
 import { COLORS } from '@/styles/colors';
 import type { Tab } from '@/types';
 
@@ -21,38 +23,23 @@ export const MainAppComponent: React.FC = () => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   // const [currentDateStr, setCurrentDateStr] = useState<string>(dateUtils.getTodayStr(currentDate));
   const [showRecorder, setShowRecorder] = useState(false);
+  const [showLedgerDescDialog, setShowLedgerDescDialog] = useState(false);
 
   // --- Hooks ---
-  // const currentDateStr = '2024-06-01'; // 固定日期，方便测试用户信息的缓存和更新逻辑
-  const currentDateStr = dateUtils.getTodayStr(currentDate); // 固定日期，方便测试用户信息的缓存和更新逻辑
-  const { userId, userProfile, setUserProfile } = useUserProfile(currentDateStr);
-
-  console.log('userProfile', userProfile);
-
-  const {
-    ledgerId,
-    currentLedger,
-    selectLedger,
-    updateLedgerBudgets,
-    allLedgers,
-    displayLedgers,
-    createLedger,
-    addLedger,
-    updateLedger,
-    deleteLedger,
-    mineLedgers,
-    joinedLedgers,
-    deleteLedgerCategory,
-  } = useLedgers(userId);
+  const { userId, userProfile, updateUserProfile, isLogin } = useUserProfile();
+  const { ledgerId, ledgerInfo, updateLedgerInfo } = useLedgerInfo(userId);
+  const { categories, updateLedgerCategories, deleteLedgerCategory } = useLedgerCategories(ledgerId);
+  const { budgets, updateLedgerBudgets } = useLedgerBudgets(ledgerId, currentDate.getFullYear());
 
   const { transactions, addTransaction, monthlyTransactions, dailyTotalTransactions } = useTransactions(
-    currentLedger,
+    userId,
+    ledgerId,
     currentDate
   );
 
-  const { monthlySpent, dailySpent, categoriesData, trendData } = useStatTransactions(monthlyTransactions);
+  const { monthlySpent, dailySpent, categoriesData } = useStatTransactions(monthlyTransactions);
 
-  const { monthlyBudget } = useStatLedgerBill(currentDate, currentLedger);
+  const { monthlyBudget } = useStatLedgerBill(currentDate, budgets || []);
 
   const { chatMessages, updateChatMessage } = useChatMessage();
 
@@ -64,11 +51,9 @@ export const MainAppComponent: React.FC = () => {
       setCurrentDate,
 
       // 用户信息
+      userId,
       userProfile,
-      setUserProfile,
-
-      // 分类
-      // allCategories,
+      updateUserProfile,
 
       // 交易
       transactions,
@@ -77,31 +62,19 @@ export const MainAppComponent: React.FC = () => {
       dailyTotalTransactions,
 
       // 账本
-      currentLedger,
-      selectLedger,
-      updateLedgerBudgets,
-      allLedgers,
-      displayLedgers,
-      createLedger,
-      addLedger,
-      updateLedger,
-      deleteLedger,
-      mineLedgers,
-      joinedLedgers,
+      ledgerId,
+      ledgerInfo,
+      updateLedgerInfo,
+      categories,
+      updateLedgerCategories,
       deleteLedgerCategory,
-
-      // 账本成员
-      // ledgerSharingMembers,
-      // setLedgerSharingMembers,
-      // updateLedgerSharingMember,
-      // addLedgerSharingMember,
-      // deleteLedgerSharingMember,
+      budgets,
+      updateLedgerBudgets,
 
       // 消费统计
       monthlySpent,
       dailySpent,
       categoriesData,
-      trendData,
       monthlyBudget,
 
       // 消息
@@ -109,57 +82,65 @@ export const MainAppComponent: React.FC = () => {
       updateChatMessage,
     }),
     [
-      addLedger,
       addTransaction,
-      allLedgers,
+      budgets,
+      categories,
       categoriesData,
       chatMessages,
-      createLedger,
       currentDate,
-      currentLedger,
       dailySpent,
       dailyTotalTransactions,
-      deleteLedger,
       deleteLedgerCategory,
-      displayLedgers,
-      joinedLedgers,
-      mineLedgers,
+      ledgerId,
+      ledgerInfo,
       monthlyBudget,
       monthlySpent,
       monthlyTransactions,
-      selectLedger,
       transactions,
-      trendData,
       updateChatMessage,
-      updateLedger,
       updateLedgerBudgets,
-      setUserProfile,
+      updateLedgerCategories,
+      updateLedgerInfo,
+      updateUserProfile,
+      userId,
       userProfile,
     ]
   );
   // const contextValue = {};
 
-  const handleTabChange = (t: Tab) => {
+  const handleTabChange = (e: ITouchEvent, t: Tab) => {
     if (t === 'add') {
-      setShowRecorder(true);
+      if (ledgerInfo?.type === 0) {
+        setShowLedgerDescDialog(true);
+        e.stopPropagation();
+      } else {
+        setShowRecorder(true);
+      }
     } else {
       if (t === activeTab) return; // 点击当前 Tab 不重复切换
       if (t === 'mine') {
-        Taro.showToast({ title: '请先登录', icon: 'none' });
+        // Taro.showToast({ title: '请先登录', icon: 'none' });
         // fetchUserProfile();
       }
       setActiveTab(t);
     }
   };
 
-  // 全局监听切入后台
+  // 1. 小程序切入后台（用户点击退出或切换App）时触发
   useDidHide(() => {
-    syncSendData('onHide');
+    console.log('[Lifecycle] 小程序进入后台，执行静默数据上报');
+    // 这里 syncSendData 内部应该去读 storage 里的 'pending_sync_data'
+    syncSendTransactionsData('onHide');
+    syncSendLedgerData(userId, 'onHide');
   });
 
-  useLaunch(() => {
-    syncSendData('onLaunch');
-  });
+  // 2. 组件挂载完成（相当于启动）时触发
+  useEffect(() => {
+    console.log('[Lifecycle] 业务主组件已就绪，检查本地补发数据');
+    // 检查是否有之前因断网没发出去的数据
+    syncSendTransactionsData('onLaunch');
+    // syncSendLedgerData(userId,'onLaunch');
+  }, []); // 仅在初始化执行一次
 
   return (
     <AppContext.Provider value={contextValue as any}>
@@ -190,6 +171,14 @@ export const MainAppComponent: React.FC = () => {
 
         {/* 记账弹窗 (Full Screen Overlay) */}
         {showRecorder && <RecorderPage onBack={() => setShowRecorder(false)} />}
+        {showLedgerDescDialog && (
+          <LedgerDescriptionDialog
+            onClose={() => {
+              setShowLedgerDescDialog(false);
+              setShowRecorder(true);
+            }}
+          />
+        )}
       </View>
     </AppContext.Provider>
     // <Text style={{ height: '100%', width: '100%' }}>abc</Text>

@@ -17,7 +17,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ onBack }) => {
   const [showGenderPage, setShowGenderPage] = useState(false);
   const [showNicknameDialog, setshowNicknameDialog] = useState(false);
   const [showAccountPage, setshowAccountPage] = useState(false);
-  const [nicknameInput, setNicknameInput] = useState(userProfile.nickname);
+  const [nicknameInput, setNicknameInput] = useState(userProfile?.nickname || '');
 
   // 1. 修改头像点击逻辑：使用 Taro.chooseImage
   const handleAvatarClick = async () => {
@@ -33,8 +33,6 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ onBack }) => {
       // 注意：这里得到的是本地临时路径 (http://tmp/...)
       // 在实际项目中，你通常需要在这里调用 Taro.uploadFile 将图片上传到服务器
       // 获取服务器 URL 后再调用 updateUserProfile
-
-      // 这里仅做演示，直接设置本地路径
       updateUserProfile({ avatar: tempFilePath });
     } catch (err) {
       // 用户取消选择或报错
@@ -43,14 +41,15 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ onBack }) => {
   };
 
   const handleUpdateNicknameInput = (nickname: string) => {
-    if (nickname.length <= 20) {
+    if (nickname.length > 0) {
       setNicknameInput(nickname);
     }
   };
 
   const handleNicknameSave = () => {
-    if (nicknameInput.trim()) {
-      updateUserProfile({ nickname: nicknameInput.trim() });
+    const nickname = nicknameInput.trim().slice(0, 20).trim();
+    if (nickname) {
+      updateUserProfile({ nickname });
       setshowNicknameDialog(false);
     }
   };
@@ -131,7 +130,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ onBack }) => {
                 marginRight: '12px', // space-x-3
               }}
             >
-              {userProfile.avatar ? (
+              {userProfile?.avatar ? (
                 <Image src={userProfile.avatar} mode='aspectFill' style={{ width: '100%', height: '100%' }} />
               ) : (
                 <Icon name='User' size={24} color={COLORS.gray400} />
@@ -166,7 +165,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ onBack }) => {
             <Text style={{ fontWeight: 500, color: COLORS.gray700 }}>昵称</Text>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
               <Text style={{ color: COLORS.gray500, fontSize: '14px', marginRight: '8px' }}>
-                {userProfile.nickname}
+                {userProfile?.nickname}
               </Text>
               <Icon name='ChevronRight' size={16} color={COLORS.gray300} />
             </View>
@@ -185,7 +184,9 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ onBack }) => {
           >
             <Text style={{ fontWeight: 500, color: COLORS.gray700 }}>账号</Text>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{ color: COLORS.gray500, fontSize: '14px', marginRight: '8px' }}>{userProfile.account}</Text>
+              <Text style={{ color: COLORS.gray500, fontSize: '14px', marginRight: '8px' }}>
+                {userProfile?.account}
+              </Text>
               <Icon name='ChevronRight' size={16} color={COLORS.gray300} />
             </View>
           </View>
@@ -199,7 +200,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ onBack }) => {
             <Text style={{ fontWeight: 500, color: COLORS.gray700 }}>性别</Text>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
               <Text style={{ color: COLORS.gray500, fontSize: '14px', marginRight: '8px' }}>
-                {userProfile.gender === 1 ? '男' : userProfile.gender === 2 ? '女' : '未知'}
+                {userProfile?.gender === 1 ? '男' : userProfile?.gender === 2 ? '女' : '未知'}
               </Text>
               <Icon name='ChevronRight' size={16} color={COLORS.gray300} />
             </View>
@@ -230,7 +231,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ onBack }) => {
 
       {showAccountPage && (
         <UpdateAccountPage
-          account={userProfile.account}
+          account={userProfile?.account || ''}
           onBack={() => setshowAccountPage(false)}
           onSave={handleAccountSave}
         />

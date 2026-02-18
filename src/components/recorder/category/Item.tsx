@@ -7,16 +7,16 @@ import { LedgerCategory } from '@/types';
 // 必须使用 React.memo，否则父组件一更新，1000个子组件全部重绘，必卡无疑
 export const CategoryItem = React.memo(
   ({
-    cat,
+    category,
     index,
     onLongPress,
     onDelete,
     isHidden,
   }: {
-    cat: LedgerCategory;
+    category: LedgerCategory;
     index: number;
     onLongPress: (index: number) => void;
-    onDelete: (id: string) => void;
+    onDelete: (catId: number) => void;
     isHidden: boolean;
   }) => {
     return (
@@ -41,7 +41,7 @@ export const CategoryItem = React.memo(
         <View
           onClick={e => {
             e.stopPropagation();
-            onDelete(cat.id);
+            onDelete(category.catId);
           }}
           style={{
             width: '24px',
@@ -55,7 +55,7 @@ export const CategoryItem = React.memo(
             flexShrink: 0,
           }}
         >
-          <Icon name='Minus' size={16} color='#ffffff' />
+          <Icon name='Minus' size={16} color={COLORS.white} />
         </View>
         <View
           style={{
@@ -70,9 +70,9 @@ export const CategoryItem = React.memo(
             flexShrink: 0,
           }}
         >
-          <Icon name={cat.iconName} size={20} color={cat.iconColor} />
+          <Icon name={category.iconName} size={20} color={category.iconColor} />
         </View>
-        <Text style={{ flex: 1, fontWeight: 500, color: '#1f2937', fontSize: '16px' }}>{cat.name}</Text>
+        <Text style={{ flex: 1, fontWeight: 500, color: COLORS.black, fontSize: '16px' }}>{category.name}</Text>
 
         {/* 视觉把手 */}
         <View style={{ padding: '8px', pointerEvents: 'none' }}>
@@ -80,7 +80,7 @@ export const CategoryItem = React.memo(
         </View>
       </View>
     );
-    // 只有当 isHidden 状态改变，或者 cat 本身数据改变时才重渲染
+    // 只有当 isHidden 状态改变，或者 category 本身数据改变时才重渲染
   },
-  (prev, next) => prev.isHidden === next.isHidden && prev.cat === next.cat && prev.index === next.index
+  (prev, next) => prev.isHidden === next.isHidden && prev.category === next.category && prev.index === next.index
 );

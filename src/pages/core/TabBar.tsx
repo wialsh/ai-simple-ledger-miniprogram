@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Text } from '@tarojs/components'; // 1. 引入 Taro 组件
+import { View, Text, ITouchEvent } from '@tarojs/components'; // 1. 引入 Taro 组件
 import { Icon } from '@/components/ui';
-import { Tab } from '@/types';
+import type { Tab } from '@/types';
 import { COLORS } from '@/styles/colors';
 
 interface TabBarProps {
   active: Tab;
-  onChange: (t: Tab) => void;
+  onChange: (e: ITouchEvent, t: Tab) => void;
 }
 
 export const TabBar: React.FC<TabBarProps> = ({ active, onChange }) => {
@@ -56,7 +56,7 @@ export const TabBar: React.FC<TabBarProps> = ({ active, onChange }) => {
       }}
     >
       {/* 1. 明细 Tab */}
-      <View onClick={() => onChange('details')} style={tabItemStyle}>
+      <View onClick={(e: ITouchEvent) => onChange(e, 'details')} style={tabItemStyle}>
         <Icon
           name='NotebookText'
           size={24}
@@ -67,14 +67,14 @@ export const TabBar: React.FC<TabBarProps> = ({ active, onChange }) => {
       </View>
 
       {/* 2. 图表 Tab */}
-      <View onClick={() => onChange('charts')} style={tabItemStyle}>
+      <View onClick={(e: ITouchEvent) => onChange(e, 'charts')} style={tabItemStyle}>
         <Icon name='ChartPie' size={24} color={getColor('charts')} strokeWidth={active === 'charts' ? 2.5 : 1.5} />
         <Text style={textStyle('charts')}>图表</Text>
       </View>
 
       {/* 3. 中间记账按钮 (凸起效果) */}
       <View
-        onClick={() => onChange('add')}
+        onClick={(e: ITouchEvent) => onChange(e, 'add')}
         // className='flex flex-col items-center justify-center -mt-6'
         style={{
           display: 'flex',
@@ -115,13 +115,13 @@ export const TabBar: React.FC<TabBarProps> = ({ active, onChange }) => {
       </View>
 
       {/* 4. 预算 Tab */}
-      <View onClick={() => onChange('bill')} style={tabItemStyle}>
+      <View onClick={(e: ITouchEvent) => onChange(e, 'bill')} style={tabItemStyle}>
         <Icon name='Landmark' size={24} color={getColor('bill')} strokeWidth={active === 'bill' ? 2.5 : 1.5} />
         <Text style={textStyle('bill')}>账单</Text>
       </View>
 
       {/* 5. 我的 Tab */}
-      <View onClick={() => onChange('mine')} style={tabItemStyle}>
+      <View onClick={(e: ITouchEvent) => onChange(e, 'mine')} style={tabItemStyle}>
         <Icon name='CircleUser' size={24} color={getColor('mine')} strokeWidth={active === 'mine' ? 2.5 : 1.5} />
         <Text style={textStyle('mine')}>我的</Text>
       </View>

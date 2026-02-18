@@ -11,7 +11,7 @@ interface CategorySetupPageProps {
 }
 
 export const CategorySetupPage: React.FC<CategorySetupPageProps> = ({ onClose, initLedger }) => {
-  const { allCategories, createLedger, updateLedger } = useContext(AppContext);
+  // const { allCategories, createLedger, updateLedgerInfo } = useContext(AppContext);
   const [ledgerName, setLedgerName] = useState(initLedger?.name || '');
   const [ledgerCategories, setLedgerCategories] = useState<LedgerCategory[]>(initLedger?.categories || []);
   const [mergedLedgerCategories, setMergedLedgerCategories] = useState<LedgerCategory[]>([]);
@@ -53,7 +53,7 @@ export const CategorySetupPage: React.FC<CategorySetupPageProps> = ({ onClose, i
     }
 
     if (isEditing && initLedger) {
-      updateLedger(initLedger.id, {
+      updateLedgerInfo(initLedger.id, {
         ...initLedger,
         name: ledgerName,
         categories: ledgerCategories,

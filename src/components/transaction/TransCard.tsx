@@ -21,7 +21,7 @@ export const TransCardModal: React.FC<TransCardModalProps> = ({ transaction, isL
         padding: '12px 16px', // py-3 px-4
         borderBottomWidth: isLastItem ? 0 : '1px',
         borderBottomStyle: 'solid',
-        borderBottomColor: '#f3f4f6', // border-gray-100
+        borderBottomColor: COLORS.gray100, // border-gray-100
       }}
     >
       {/* Icon Circle */}
@@ -30,7 +30,7 @@ export const TransCardModal: React.FC<TransCardModalProps> = ({ transaction, isL
           width: '40px',
           height: '40px',
           borderRadius: '50%',
-          backgroundColor: '#f3f4f6', // bg-gray-100
+          backgroundColor: COLORS.gray100, // bg-gray-100
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -42,13 +42,13 @@ export const TransCardModal: React.FC<TransCardModalProps> = ({ transaction, isL
 
       {/* Content Text */}
       <View style={{ flex: 1 }}>
-        <Text style={{ color: '#1f2937' }}>{transaction.categoryName}</Text>
+        <Text style={{ color: COLORS.black }}>{transaction.catName}</Text>
         {transaction.remark && (
           // 注意：这里需要 Text 包裹或者用 block 元素
           <View
             style={{
               fontSize: '12px',
-              color: '#9ca3af',
+              color: COLORS.gray400,
               marginTop: '2px',
             }}
           >
@@ -60,7 +60,7 @@ export const TransCardModal: React.FC<TransCardModalProps> = ({ transaction, isL
       {/* Amount */}
       <View
         style={{
-          color: !isPositive ? '#ef4444' : '#1f2937',
+          color: !isPositive ? COLORS.red500 : COLORS.black,
         }}
       >
         <Text>

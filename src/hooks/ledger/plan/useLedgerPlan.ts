@@ -20,7 +20,7 @@ export const useLedgerPlan = (ledger: Ledger, currentDate: Date) => {
     }
   }, [ledgerPlan, currentDate]) as PlanBill;
 
-  const updateLedgerPlan = (amount: number, planDate: Date) => {
+  const updateLedgerInfoPlan = (amount: number, planDate: Date) => {
     setLedgerPlan(prev => {
       if (!prev) {
         const planYear = dateUtils.getYear(planDate);
@@ -58,7 +58,7 @@ export const useLedgerPlan = (ledger: Ledger, currentDate: Date) => {
 
   return {
     ledgerPlan,
-    updateLedgerPlan,
+    updateLedgerInfoPlan,
     monthlyPlanBill,
   };
 };

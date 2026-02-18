@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text } from '@tarojs/components';
 import { Icon } from '@/components/ui';
+import { COLORS } from '@/styles/colors';
 
 export const TransEmptyModal: React.FC = () => {
   return (
@@ -14,7 +15,7 @@ export const TransEmptyModal: React.FC = () => {
       }}
     >
       <Icon name='FileText' size={48} style={{ marginBottom: '8px', opacity: 0.5 }} />
-      <Text style={{ color: '#9ca3af' }}>本月暂无记录</Text>
+      <Text style={{ color: COLORS.gray400 }}>暂无记录</Text>
     </View>
   );
 };

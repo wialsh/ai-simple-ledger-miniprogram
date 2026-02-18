@@ -15,7 +15,7 @@ function isIsoDateString(value: any): boolean {
 /**
  * 递归遍历对象，将所有日期格式的字符串转换为 Date 对象
  */
-function parseDates(body: any): any {
+export function parseDates(body: any): any {
   if (body === null || body === undefined || typeof body !== 'object') {
     return body;
   }

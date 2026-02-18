@@ -13,7 +13,7 @@ interface LedgerSharePageProps {
 }
 
 export const LedgerSharePage: React.FC<LedgerSharePageProps> = ({ onClose }) => {
-  const { mineLedgers, joinedLedgers, updateLedger, currentDate } = useContext(AppContext);
+  const { mineLedgers, joinedLedgers, updateLedgerInfo, currentDate } = useContext(AppContext);
   const [activeTab, setActiveTab] = useState<'shared' | 'joined'>('shared');
   const [shareDate, setShareDate] = useState(currentDate);
   const [targetLedger, setTargetLedger] = useState<Ledger | null>(null);
@@ -27,7 +27,7 @@ export const LedgerSharePage: React.FC<LedgerSharePageProps> = ({ onClose }) => 
 
   const handleShareOp = (type: number) => {
     if (targetLedger) {
-      updateLedger(targetLedger.id, { type: type });
+      updateLedgerInfo(targetLedger.id, { type: type });
     }
     setClickType('');
   };

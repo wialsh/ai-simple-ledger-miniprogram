@@ -198,7 +198,7 @@ export const LedgerCard: React.FC<LedgerCardProps> = ({ ledger, onClick, onEdit,
               textOverflow: 'ellipsis',
             }}
           >
-            {ledger.desc}
+            {ledger.description}
           </Text>
         </View>
       </View>

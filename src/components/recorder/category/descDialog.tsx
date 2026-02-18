@@ -2,51 +2,28 @@ import React, { useContext, useRef } from 'react';
 import { View, Text, RootPortal, Textarea } from '@tarojs/components';
 import { AppContext } from '@/context/AppContext';
 import { COLORS } from '@/styles/colors';
-import type { LedgerCategory } from '@/types';
 
-interface AddCategoryDialogProps {
-  maxCategories: number;
+interface LedgerDescriptionDialogProps {
+  maxLength?: number;
   onClose: () => void;
 }
 
-export const AddCategoryDialog: React.FC<AddCategoryDialogProps> = ({ maxCategories, onClose }) => {
-  const { currentLedger, updateLedger } = useContext(AppContext);
+export const LedgerDescriptionDialog: React.FC<LedgerDescriptionDialogProps> = ({ onClose }) => {
+  const { updateLedgerInfo } = useContext(AppContext);
   // const [textValue, setTextValue] = useState('');
   // 1. 改用 Ref 存储数据，不触发渲染
   const textValueRef = useRef('');
 
   const handleConfirm = () => {
-    // const lines = textValue.split('\n');
-    if (!textValueRef.current.trim()) {
-      onClose();
-      return;
-    }
-    const lines = textValueRef.current.trim().split('\n');
-
-    const validNames = lines.map(line => line.trim().substring(0, 6).trim()).filter(line => line.length > 0);
-    const uniqueNames = [...new Set(validNames)];
-
-    if (uniqueNames.length === 0) {
-      onClose();
-      return;
+    let ledgerDescriton = textValueRef.current.trim();
+    if (!ledgerDescriton || ledgerDescriton.length < 3) {
+      ledgerDescriton = '记录工作相关收支，如差旅、办公、团建等。';
     }
 
-    const newCategoriesToAdd: LedgerCategory[] = uniqueNames.map(name => ({
-      id: `custom-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      name: name,
-      type: 0,
-      iconName: 'Bookmark',
-      iconColor: COLORS.primary,
-    }));
-
-    const existingCategories = currentLedger.categories || [];
-    const updatedCategories = [...existingCategories, ...newCategoriesToAdd];
-
-    updateLedger(currentLedger.id, {
-      ...currentLedger,
-      categories: updatedCategories,
+    updateLedgerInfo({
+      description: ledgerDescriton,
+      type: 1,
     });
-
     onClose();
   };
 
@@ -92,7 +69,7 @@ export const AddCategoryDialog: React.FC<AddCategoryDialogProps> = ({ maxCategor
               textAlign: 'center',
             }}
           >
-            批量添加分类
+            账本描述
           </Text>
 
           <Text
@@ -103,7 +80,7 @@ export const AddCategoryDialog: React.FC<AddCategoryDialogProps> = ({ maxCategor
               textAlign: 'center',
             }}
           >
-            请输入分类名称，一行一个（一行最多6个字符，超过截断）
+            请输入账本的描述信息（不少于6个字符）
           </Text>
 
           {/* 大编辑框容器 */}
@@ -123,7 +100,7 @@ export const AddCategoryDialog: React.FC<AddCategoryDialogProps> = ({ maxCategor
               onInput={e => {
                 textValueRef.current = e.detail.value;
               }}
-              placeholder={'例如：\n早餐\n交通\n娱乐'}
+              placeholder='例如：记录工作相关收支，如差旅、办公、团建等。'
               maxlength={-1}
               style={{
                 width: '100%',
@@ -140,7 +117,7 @@ export const AddCategoryDialog: React.FC<AddCategoryDialogProps> = ({ maxCategor
 
           {/* 按钮区域 */}
           <View style={{ display: 'flex', flexDirection: 'row', gap: '12px' }}>
-            <View
+            {/* <View
               onClick={onClose}
               style={{
                 flex: 1,
@@ -153,7 +130,7 @@ export const AddCategoryDialog: React.FC<AddCategoryDialogProps> = ({ maxCategor
               }}
             >
               <Text style={{ fontWeight: 'bold', color: COLORS.gray500, fontSize: '14px' }}>取消</Text>
-            </View>
+            </View> */}
 
             <View
               onClick={handleConfirm}
@@ -167,7 +144,7 @@ export const AddCategoryDialog: React.FC<AddCategoryDialogProps> = ({ maxCategor
                 justifyContent: 'center',
               }}
             >
-              <Text style={{ fontWeight: 'bold', color: COLORS.black, fontSize: '14px' }}>保存</Text>
+              <Text style={{ fontWeight: 'bold', color: COLORS.black, fontSize: '14px' }}>确认</Text>
             </View>
           </View>
         </View>

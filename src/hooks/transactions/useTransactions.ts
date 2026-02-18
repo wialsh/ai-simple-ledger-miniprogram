@@ -1,84 +1,77 @@
 import { useState, useMemo, useEffect } from 'react';
-import { transactionService, storageService } from '@/services';
+import { transactionsService2 } from '@/services';
 import * as dateUtils from '@/utils/dateUtils';
-import { Transaction, Ledger, LedgerCategory } from '@/types';
+import { Transaction, LedgerCategory } from '@/types';
 
-export const useTransactions = (ledger: Ledger, currentDate: Date) => {
+export const useTransactions = (userId, ledgerId: number, currentDate: Date) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const fetchData = async () => {
-    // await Promise.all
-    const fetchedTransactions = await transactionService.getByLedgerId(ledger.id);
+  useEffect(() => {
+    if (transactions.length > 0) {
+      transactionsService2.save(transactions);
+    }
+  }, [transactions]);
 
-    setTransactions(fetchedTransactions);
-  };
-
-  // 获取月度交易
-  const monthlyTransactions = useMemo(() => {
-    const findedResult = transactions.filter(t => dateUtils.isSameMonth(t.createdAt, currentDate));
-    return findedResult || [];
-  }, [transactions, currentDate]);
-
-  // 新增一笔消费
-  const addTransaction = (
-    userId: number,
-    amount: number,
-    recordDate: Date,
-    remark: string,
-    category: LedgerCategory
-  ) => {
+  const addTransaction = async (amount: number, recordDate: Date, remark: string, category: LedgerCategory) => {
     const now = new Date();
-    const trans: Transaction = {
-      transId: now.getTime(), //交易ID
+    const newTrans: Transaction = {
+      transId: now.getTime(), // 临时本地 ID
       amount,
       remark,
       recordDate,
-      userId: userId,
-      ledgerId: ledger.id,
-      ownerId: ledger.ownerId,
+      userId,
+      ledgerId: ledgerId,
+      catName: category.name,
       iconName: category.iconName,
       iconColor: category.iconColor,
-      isDeleted: false,
-      createdAt: now,
-      updatedAt: now,
     };
-
-    setTransactions(prev => [trans, ...prev]);
-    storageService.set(`transactions`, transactions);
+    setTransactions(prev => (prev ? [newTrans, ...prev] : [newTrans]));
   };
+
+  // ---------------------------------------------------------
+  // 4. 数据计算 (useMemo)
+  // ---------------------------------------------------------
+  const monthlyTransactions = useMemo(() => {
+    // console.log('计算本月交易记录: 依赖变化了', transactions, currentDate);
+    const findedResult = transactions.filter(t => dateUtils.isSameMonth(t.recordDate, currentDate));
+    return findedResult || [];
+  }, [transactions, currentDate]);
 
   /**
    * 按天统计消费
    */
   const dailyTotalTransactions = useMemo(() => {
-    if (!monthlyTransactions) return []; // 防止 undefined 报错
-    const dailyGroups: {
-      date: Date;
-      items: Transaction[];
-      amount: number;
-    }[] = [];
-    monthlyTransactions?.forEach(t => {
-      const existing = dailyGroups.find(g => dateUtils.isSameDay(g.date, t.createdAt));
+    if (!transactions.length) return [];
+    const dailyGroups: Map<string, { date: Date; items: Transaction[]; amount: number }> = new Map();
+    transactions.forEach(t => {
+      const dateKey = dateUtils.formatDate(t.recordDate, 'YYYY-MM-DD');
+      const existing = dailyGroups.get(dateKey);
+
       if (existing) {
         existing.items.push(t);
         existing.amount += t.amount;
       } else {
-        dailyGroups.push({
-          date: t.createdAt,
+        dailyGroups.set(dateKey, {
+          date: t.recordDate,
           items: [t],
           amount: t.amount,
         });
       }
     });
-    return dailyGroups;
-  }, [monthlyTransactions]);
+
+    // 转回数组并按日期倒序排列
+    return Array.from(dailyGroups.values()).sort((a, b) => b.date.getTime() - a.date.getTime());
+  }, [transactions]);
 
   useEffect(() => {
-    if (ledger?.id) {
-      fetchData();
-    }
-  }, [fetchData, ledger?.id]);
+    transactionsService2.getAll(ledgerId).then(data => {
+      if (data?.transactions) {
+        setTransactions(data.transactions);
+      }
+    });
+  }, [ledgerId]);
+
   return {
     transactions,
     addTransaction,

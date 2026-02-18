@@ -1,16 +1,15 @@
 import Taro from '@tarojs/taro';
 import type { UserProfile, Response } from '@/types';
-import { storageService } from '../local/storage';
-import { CLOUD_ENV, X_WX_SERVICE } from '../request/config';
+import { CLOUD_ENV, X_WX_SERVICE } from '@/services/request/config';
+import apiClient from '@/services/request';
+
+const cachedKey = 'user_info';
 
 // --- 初始化云开发 (小程序端必须) ---
 if (process.env.TARO_ENV === 'weapp' && Taro.cloud) {
   Taro.cloud.init({ env: CLOUD_ENV });
 }
 
-// ==============================
-// 用户 (User) - 查改
-// ==============================
 export const userProfileService = {
   get: async () => {
     // 此时不需要调用 Taro.login() 获取 code！
@@ -40,23 +39,25 @@ export const userProfileService = {
         data: data,
       });
 
-      console.log('调用云托管接口的 result', result);
+      // console.log('调用云托管接口的 result', result);
 
       if (result.statusCode === 200 && result.data.data.token) {
-        console.log('登录成功，用户信息：', result.data.data);
+        // console.log('登录成功，用户信息：', result.data.data);
         // 将后端返回的 UserProfile 存入本地缓存
-        Taro.setStorageSync('user_info', result.data.data);
+        // Taro.setStorageSync('user_info', result.data.data);
+        // storageService.set(cachedKey, result.data.data);
         // Taro.showToast({ title: '登录成功' });
         return result.data.data;
       }
     } catch (err) {
       // Taro.showToast({ title: '登录失败', icon: 'error' });
       console.error('登录失败', err);
-      return null;
+      return;
     }
   },
 
-  getFromCache: (): UserProfile | null => {
-    return storageService.get<UserProfile>('user_info');
+  save: async (userId: number, userProfile: UserProfile) => {
+    const result = await apiClient.post<Response<null>>(`/user/${userId}/profile`, userProfile);
+    return result.data;
   },
 };

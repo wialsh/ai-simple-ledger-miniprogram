@@ -9,7 +9,7 @@ export const useLedgerSharingMember = (ledgerId: number) => {
     setLedgerSharingMembers(fetchedUser);
   };
 
-  const updateLedgerSharingMember = (
+  const updateLedgerInfoSharingMember = (
     id: number,
     updates: Partial<Pick<LedgerSharingMember, 'nickname' | 'avatar' | 'isSharing'>>
   ) => {
@@ -55,7 +55,7 @@ export const useLedgerSharingMember = (ledgerId: number) => {
   return {
     ledgerSharingMembers,
     setLedgerSharingMembers,
-    updateLedgerSharingMember,
+    updateLedgerInfoSharingMember,
     addLedgerSharingMember,
     deleteLedgerSharingMember,
   };

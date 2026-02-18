@@ -5,13 +5,13 @@ import type { LedgerCategory } from '@/types';
 import { COLORS } from '@/styles/colors';
 
 interface CategoriesGridsProps {
-  selectediconName: string;
+  selectedCatId: number;
   categories: LedgerCategory[];
-  onClick: (iconName: string) => void;
+  onClick: (catId: number) => void;
   onEdit: () => void;
 }
 
-export const CategoriesGrids: React.FC<CategoriesGridsProps> = ({ selectediconName, categories, onClick, onEdit }) => {
+export const CategoriesGrids: React.FC<CategoriesGridsProps> = ({ selectedCatId, categories, onClick, onEdit }) => {
   return (
     <View
       style={{
@@ -23,12 +23,12 @@ export const CategoriesGrids: React.FC<CategoriesGridsProps> = ({ selectediconNa
       }}
     >
       {categories.map(cat => {
-        const isSelected = selectediconName === cat.iconName;
+        const isSelected = selectedCatId === cat.catId;
 
         return (
           <View
-            key={cat.iconName}
-            onClick={() => onClick(cat.iconName)}
+            key={cat.catId}
+            onClick={() => onClick(cat.catId)}
             style={{
               // 模拟 grid-cols-4：每个元素宽度 25%
               width: '25%', // 5列布局 (100/5)

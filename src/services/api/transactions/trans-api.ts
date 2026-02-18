@@ -1,11 +1,11 @@
 import type { Transaction, Response } from '@/types';
-import apiClient from '../request';
-import { deserializer } from '../request/deserialize';
+import apiClient from '@/services/request';
+import { deserializer } from '@/services/common';
 
 // ==============================
 // 交易（Transactions）- 增删查
 // ==============================
-export const transactionService = {
+export const transactionsService = {
   // 获取指定账本的交易
   getByLedgerId: async (ledgerId: number) => {
     const response = await apiClient.get<Response<Transaction[]>>(`/transactions/byLedger/${ledgerId}`);

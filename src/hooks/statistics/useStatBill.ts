@@ -1,18 +1,17 @@
 import { useMemo } from 'react';
-import { Ledger } from '@/types';
+import type { Budget } from '@/types';
 
-export const useStatLedgerBill = (currentDate: Date, currentLedger: Ledger) => {
+export const useStatLedgerBill = (currentDate: Date, budgets: Budget[]) => {
   // 统计月度预算
   const monthlyBudget = useMemo(() => {
     const year = currentDate.getFullYear();
-    const monthIndex = currentDate.getMonth();
-    const bills = currentLedger?.budgets || [];
-    if (bills) {
-      const filteredBills = bills.find(b => b.year === year);
-      return filteredBills?.amounts[monthIndex] || 0;
+    const month = currentDate.getMonth();
+    if (budgets.length > 0) {
+      const filteredBudgets = budgets.find(b => b.year === year && b.month === month);
+      return filteredBudgets?.amount || 0;
     }
     return 0;
-  }, [currentDate, currentLedger?.budgets]);
+  }, [currentDate, budgets]);
 
   return { monthlyBudget };
 };

@@ -50,7 +50,7 @@ export const ChartsPage: React.FC = () => {
             </View>
           ) : (
             categoriesData.map((category, idx) => {
-              const percentage = monthlySpent > 0 ? (category.amount / monthlySpent) * 100 : 0;
+              const percentage = monthlySpent > 0 ? (category.transAmount / monthlySpent) * 100 : 0;
 
               return (
                 <View
@@ -74,7 +74,7 @@ export const ChartsPage: React.FC = () => {
                       marginRight: '12px',
                     }}
                   >
-                    <Icon name={category.name || 'HelpCircle'} size={20} color={category.color || '#9ca3af'} />
+                    <Icon name={category.iconName || 'HelpCircle'} size={20} color={category.iconColor || '#9ca3af'} />
                   </View>
 
                   <View style={{ flex: 1 }}>
@@ -94,7 +94,7 @@ export const ChartsPage: React.FC = () => {
                       >
                         {category.displayName}
                       </Text>
-                      <Text style={{ fontSize: '14px', fontWeight: 'bold' }}>{formatNumber(category.amount)}</Text>
+                      <Text style={{ fontSize: '14px', fontWeight: 'bold' }}>{formatNumber(category.transAmount)}</Text>
                     </View>
 
                     <View
@@ -110,7 +110,7 @@ export const ChartsPage: React.FC = () => {
                         style={{
                           height: '100%',
                           width: `${percentage}%`,
-                          backgroundColor: category.color || COLORS.primary,
+                          backgroundColor: category.iconColor || COLORS.primary,
                           borderRadius: '999px',
                         }}
                       />

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import * as dateUtils from '@/utils/dateUtils';
-import { Transaction, CategoriesSpend, TrendData } from '@/types';
+import type { Transaction, CategoriesSpend } from '@/types';
 
 export const useStatTransactions = (monthlyTransactions: Transaction[]) => {
   // 统计月度计消费
@@ -33,18 +33,18 @@ export const useStatTransactions = (monthlyTransactions: Transaction[]) => {
 
   // 统计分类信息
   const categoriesData = useMemo(() => {
-    const map = new Map<number, CategoriesSpend>();
+    const map = new Map<string, CategoriesSpend>();
     monthlyTransactions.forEach(t => {
-      const statInfo = map.get(t.iconName);
+      const statInfo = map.get(t.catName);
       if (statInfo) {
-        statInfo.amount += t.amount;
-        map.set(t.iconName, statInfo);
+        statInfo.transAmount += t.amount;
+        map.set(t.catName, statInfo);
       } else {
-        map.set(t.iconName, {
-          displayName: t.categoryName,
-          name: t.iconName,
-          color: t.iconColor,
-          amount: t.amount,
+        map.set(t.catName, {
+          displayName: t.catName,
+          iconName: t.iconName,
+          iconColor: t.iconColor,
+          transAmount: t.amount,
         });
       }
     });
@@ -53,28 +53,28 @@ export const useStatTransactions = (monthlyTransactions: Transaction[]) => {
       .map(([iconName, statInfo]) => {
         return statInfo;
       })
-      .sort((a, b) => b.amount - a.amount);
+      .sort((a, b) => b.transAmount - a.transAmount);
   }, [monthlyTransactions]);
 
   /**
    * 统计每天消费（按月的每一天）
    */
-  const trendData = useMemo(() => {
-    const currentDate = new Date();
-    const days = Array.from({ length: dateUtils.endOfMonth(currentDate).getDate() }, (_, i) => {
-      const d = i + 1;
-      return {
-        label: `${d}日`,
-        value: new Date(currentDate.getFullYear(), currentDate.getMonth(), d),
-      };
-    });
-    return days.map(day => {
-      const amount = monthlyTransactions
-        .filter(t => dateUtils.isSameDay(t.recordDate, day.value))
-        .reduce((sum, t) => sum + t.amount, 0);
-      return { day: day.label, amount };
-    });
-  }, [monthlyTransactions]) as TrendData[];
+  // const trendData = useMemo(() => {
+  //   const currentDate = new Date();
+  //   const days = Array.from({ length: dateUtils.endOfMonth(currentDate).getDate() }, (_, i) => {
+  //     const d = i + 1;
+  //     return {
+  //       label: `${d}日`,
+  //       value: new Date(currentDate.getFullYear(), currentDate.getMonth(), d),
+  //     };
+  //   });
+  //   return days.map(day => {
+  //     const amount = monthlyTransactions
+  //       .filter(t => dateUtils.isSameDay(t.recordDate, day.value))
+  //       .reduce((sum, t) => sum + t.amount, 0);
+  //     return { day: day.label, amount };
+  //   });
+  // }, [monthlyTransactions]) as TrendData[];
 
-  return { monthlySpent, dailySpent, categoriesData, trendData };
+  return { monthlySpent, dailySpent, categoriesData };
 };

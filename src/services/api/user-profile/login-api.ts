@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro';
 import type { UserProfile, Response } from '@/types';
-import { TARO_ENV, NODE_ENV, BASE_URL, CLOUD_ENV, X_WX_SERVICE } from '../request/config';
+import { TARO_ENV, NODE_ENV, BASE_URL, CLOUD_ENV, X_WX_SERVICE } from '../../request/config';
 
 // --- 初始化云开发 (小程序端必须) ---
 if (TARO_ENV === 'weapp' && Taro.cloud) {
@@ -79,13 +79,14 @@ export const wxLogin = async () => {
         console.log('登录成功，result:', result);
         console.log('登录成功，Token:', result.data.token);
       } else {
-        Taro.showToast({ title: '服务器登录失败', icon: 'none' });
+        // Taro.showToast({ title: '服务器登录失败', icon: 'none' });
+        console.log('服务器登录失败，result:', result);
       }
     } else {
       console.log('登录失败！' + loginRes.errMsg);
     }
   } catch (err) {
     console.error('请求异常', err);
-    Taro.showToast({ title: '网络异常', icon: 'none' });
+    // Taro.showToast({ title: '网络异常', icon: 'none' });
   }
 };

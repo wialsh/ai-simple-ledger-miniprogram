@@ -13,14 +13,14 @@ interface MemberPageProps {
 }
 
 export const MemberPage: React.FC<MemberPageProps> = ({ onClick, onClose }) => {
-  const { currentLedger, ledgerSharingMembers, setLedgerSharingMembers, updateLedgerSharingMember } = useAppContext();
+  const { ledgerInfo, ledgerSharingMembers, setLedgerSharingMembers, updateLedgerInfoSharingMember } = useAppContext();
 
   const [showSearch, setShowSearch] = useState(false);
   const [showBatchMenu, setShowBatchMenu] = useState(false);
 
   // 切换单个开关
   const toggleMember = (memberId: number, checked: boolean) => {
-    updateLedgerSharingMember(memberId, { isSharing: checked });
+    updateLedgerInfoSharingMember(memberId, { isSharing: checked });
   };
 
   // 添加成员回调
@@ -30,7 +30,7 @@ export const MemberPage: React.FC<MemberPageProps> = ({ onClick, onClose }) => {
       ...user,
       isSharing: true,
       joinTime: now,
-      ledgerId: currentLedger.id,
+      ledgerId: ledgerInfo.id,
       createdAt: now,
       updatedAt: now,
       isDeleted: false,

@@ -12,7 +12,7 @@ interface LedgersPageProps {
 }
 
 export const LedgersPage: React.FC<LedgersPageProps> = ({ onClose }) => {
-  const { selectLedger, displayLedgers, deleteLedger } = useContext(AppContext);
+  // const { selectLedger, displayLedgers, deleteLedger } = useContext(AppContext);
   const [editingLedger, setEditingLedger] = useState<Ledger | null>(null);
   const [isCreatingLedger, setIsCreatingLedger] = useState(false);
 

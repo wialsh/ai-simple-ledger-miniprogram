@@ -12,7 +12,7 @@ interface BillSetupPageProps {
 }
 
 export const BillSetupPage: React.FC<BillSetupPageProps> = ({ onClose }) => {
-  const { currentDate, currentLedger, updateLedgerBill } = useContext(AppContext);
+  const { currentDate, ledgerInfo, updateLedgerInfoBill } = useContext(AppContext);
   const [showDialog, setShowDialog] = useState(false);
   const [inputTotalValue, setInputTotalValue] = useState<string>('');
   const [inputValues, setInputValues] = useState<string[]>(Array(12).fill(''));
@@ -51,7 +51,7 @@ export const BillSetupPage: React.FC<BillSetupPageProps> = ({ onClose }) => {
 
   // 初始化数据
   useEffect(() => {
-    const findedBill = currentLedger?.bills?.find(b => b.year === planDate.getFullYear());
+    const findedBill = ledgerInfo?.bills?.find(b => b.year === planDate.getFullYear());
     const newValues = new Array(12).fill('');
     if (findedBill) {
       findedBill.amounts.forEach((amount, i) => {
@@ -62,15 +62,15 @@ export const BillSetupPage: React.FC<BillSetupPageProps> = ({ onClose }) => {
     }
     inputValuesRef.current = newValues;
     setInputValues(newValues);
-  }, [planDate, currentLedger]);
+  }, [planDate, ledgerInfo]);
 
   // 同步到全局 Context
   useEffect(() => {
     // console.log('bill', bill);
     if (bill) {
-      updateLedgerBill(bill);
+      updateLedgerInfoBill(bill);
     }
-  }, [bill, updateLedgerBill]);
+  }, [bill, updateLedgerInfoBill]);
 
   return (
     <RootPortal>
