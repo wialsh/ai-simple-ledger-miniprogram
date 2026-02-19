@@ -3,6 +3,7 @@
   "projectname": "ai-simple-ledger-miniprogram",
   "description": "",
   "appid": "wx811c219d9f9dc93f",
+  "lazyCodeLoading": "requiredComponents",
   "setting": {
     "urlCheck": true,
     "es6": true,
