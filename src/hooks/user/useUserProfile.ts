@@ -6,7 +6,6 @@ export const useUserProfile = () => {
   const [userProfile, setUserProfile] = useState<UserProfile>();
 
   const userId = useMemo(() => userProfile?.id || 0, [userProfile]);
-  const isLogin = useMemo(() => userProfileService2.isLogin(), []);
 
   useEffect(() => {
     if (userProfile?.id) {
@@ -26,5 +25,5 @@ export const useUserProfile = () => {
     });
   }, []);
 
-  return { userId, userProfile, updateUserProfile, isLogin };
+  return { userId, userProfile, updateUserProfile };
 };

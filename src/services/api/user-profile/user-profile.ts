@@ -7,7 +7,6 @@ import { userProfileConstants } from './constants';
 const cachedKey = 'user_info';
 const lastCheckDateKey = 'last_check_date';
 const tokenKey = 'token';
-const isLoginKey = 'is_login';
 
 const getFromLocal = () => {
   const userProfile = storageService.get<UserProfile>(cachedKey);
@@ -26,7 +25,6 @@ const getFromServer = async () => {
     storageService.set(cachedKey, userProfile);
     storageService.set(lastCheckDateKey, todayStr);
     storageService.set(tokenKey, userProfile.token);
-    storageService.set(isLoginKey, true);
     console.log('从服务器获取用户信息数据成功，更新本地缓存', userProfile);
     return { userProfile };
   }
@@ -89,10 +87,6 @@ export const userProfileService2 = {
 
   clearLocal: () => {
     storageService.remove(cachedKey);
-    console.log('已清除本地交易数据');
-  },
-
-  isLogin: () => {
-    return storageService.get(isLoginKey) || false;
+    console.log('已清除本地用户信息数据');
   },
 };

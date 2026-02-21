@@ -4,4 +4,4 @@ export type ClickType = 'Share' | 'ResetShareTime' | 'Member' | 'CancelShare' | 
 
 export type LedgerPick = 'name' | 'description' | 'iconName' | 'iconColor' | 'type' | 'isActived';
 
-export type UserProfilePick = 'account' | 'nickname' | 'phone' | 'email' | 'gender' | 'avatar';
+export type UserProfilePick = 'account' | 'nickname' | 'phone' | 'email' | 'gender' | 'avatar' | 'isLogin';

@@ -7,6 +7,7 @@ export interface UserProfile {
   gender: number; //性别（1-男、2-女、0-未知（默认））
   avatar: string;
   isVip: number;
+  isLogin: number;
   token?: string;
 }
 

@@ -4,6 +4,7 @@ import { View, Text, ITouchEvent } from '@tarojs/components';
 import { AppContext } from '@/context/AppContext';
 import { TabBar, RecorderPage, DetailsPage, ChartsPage, BillPage, MinePage } from '@/pages/core';
 import { LedgerDescriptionDialog } from '@/components/recorder';
+import { Dialog } from '@/components/ui';
 import {
   useUserProfile,
   useLedgerInfo,
@@ -24,9 +25,10 @@ export const MainAppComponent: React.FC = () => {
   // const [currentDateStr, setCurrentDateStr] = useState<string>(dateUtils.getTodayStr(currentDate));
   const [showRecorder, setShowRecorder] = useState(false);
   const [showLedgerDescDialog, setShowLedgerDescDialog] = useState(false);
+  const [showLoginDialog, setShowLoginDialog] = useState(false);
 
   // --- Hooks ---
-  const { userId, userProfile, updateUserProfile, isLogin } = useUserProfile();
+  const { userId, userProfile, updateUserProfile } = useUserProfile();
   const { ledgerId, ledgerInfo, updateLedgerInfo } = useLedgerInfo(userId);
   const { categories, updateLedgerCategories, deleteLedgerCategory } = useLedgerCategories(ledgerId);
   const { budgets, updateLedgerBudgets } = useLedgerBudgets(ledgerId, currentDate.getFullYear());
@@ -108,6 +110,12 @@ export const MainAppComponent: React.FC = () => {
   );
   // const contextValue = {};
 
+  const handleLoginClick = () => {
+    setShowLoginDialog(false);
+    updateUserProfile({ isLogin: 1 });
+    setActiveTab('mine');
+  };
+
   const handleTabChange = (e: ITouchEvent, t: Tab) => {
     if (t === 'add') {
       if (ledgerInfo?.type === 0) {
@@ -121,6 +129,11 @@ export const MainAppComponent: React.FC = () => {
       if (t === 'mine') {
         // Taro.showToast({ title: '请先登录', icon: 'none' });
         // fetchUserProfile();
+        if (!userProfile?.isLogin) {
+          Taro.showToast({ title: '请先登录', icon: 'none' });
+          setShowLoginDialog(true);
+          return;
+        }
       }
       setActiveTab(t);
     }
@@ -177,6 +190,18 @@ export const MainAppComponent: React.FC = () => {
               setShowLedgerDescDialog(false);
               setShowRecorder(true);
             }}
+          />
+        )}
+
+        {showLoginDialog && (
+          <Dialog
+            title='是否登录？'
+            onCloseName='取消'
+            onClickName='确认'
+            onClose={() => setShowLoginDialog(false)}
+            onClick={handleLoginClick}
+            onClickStyle={{ backgroundColor: COLORS.primaryDark }}
+            onClickTextStyle={{ color: COLORS.white }}
           />
         )}
       </View>

@@ -12,6 +12,7 @@ export const userProfileConstants = {
       gender: 0, //性别（1-男、2-女、0-未知（默认））
       avatar: '',
       isVip: 0,
+      isLogin: 0,
       token: '',
     };
     return userInfo;
