@@ -20,9 +20,9 @@ export const syncSendTransactionsData = async (sendWay: 'onHide' | 'onLaunch' = 
 export const syncSendLedgerData = async (userId: number, sendWay: 'onHide' | 'onLaunch' = 'onHide') => {
   try {
     const { ledgerInfo } = ledgerInfoService.getFromLocal(userId);
-    const { categories } = ledgerCategoriesService.getFromLocal();
-    const { budgets } = ledgerBudgetsService.getFromLocal();
     if (ledgerInfo?.id) {
+      const { categories } = ledgerCategoriesService.getFromLocal(ledgerInfo?.id || 0);
+      const { budgets } = ledgerBudgetsService.getFromLocal(ledgerInfo?.id || 0);
       console.log('发现本地未同步的账本数据，正在同步...', { ledgerInfo, categories, budgets });
       const result = await ledgerInfoService.save(ledgerInfo);
       const result2 = await ledgerCategoriesService.save(ledgerInfo.id, categories);

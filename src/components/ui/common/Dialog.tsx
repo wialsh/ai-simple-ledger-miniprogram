@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Input, RootPortal } from '@tarojs/components';
+import { COLORS } from '@/styles/colors';
 
 interface DialogProps {
   // --- 基础弹窗属性 ---
@@ -56,10 +57,10 @@ export const Dialog: React.FC<DialogProps> = ({
 
   // 定义基础颜色常量，作为默认值
   const DEFAULT_COLORS = {
-    closeBg: '#f3f4f6', // gray-100
-    closeText: '#4b5563', // gray-600
-    confirmBg: '#49807D', // primary-dark
-    confirmText: '#ffffff', // white (通常确认按钮文字是白色)
+    closeBg: COLORS.gray100, // gray-100
+    closeText: COLORS.gray600, // gray-600
+    confirmBg: COLORS.primaryDark, // primary-dark
+    confirmText: COLORS.white, // white (通常确认按钮文字是白色)
   };
 
   return (

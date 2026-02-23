@@ -93,10 +93,10 @@ export const ledgerConstants = {
   },
 
   // 💡 获取默认分类（明确标记为异步函数）
-  getDefaultCategories: (): LedgerCategory[] => {
+  getDefaultCategories: (ledgerId: number): LedgerCategory[] => {
     return RAW_CATEGORIES.map(cat => {
       // 使用名称 + userId 生成唯一 Hash，防止不同用户的账本的分类 ID 冲突
-      const catId = hashIdByCrypto(cat.name);
+      const catId = hashIdByCrypto(`${ledgerId}-${cat.name}`);
       return {
         ...cat,
         catId: Number(catId.toString().substring(0, 15)), // 确保是数字类型

@@ -200,7 +200,7 @@ export const MainAppComponent: React.FC = () => {
             onClickName='确认'
             onClose={() => setShowLoginDialog(false)}
             onClick={handleLoginClick}
-            onClickStyle={{ backgroundColor: COLORS.primaryDark }}
+            onClickStyle={{ backgroundColor: COLORS.primaryDark5 }}
             onClickTextStyle={{ color: COLORS.white }}
           />
         )}

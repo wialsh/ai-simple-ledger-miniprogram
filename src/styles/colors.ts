@@ -21,10 +21,13 @@ export const COLORS = {
   gray700: '#374151',
   gray800: '#1f2937',
   gray900: '#111827',
-  primary: '#76BDB9',
+  // primary: '#76BDB9',
+  primary: '#F0F3F7', // 之前的主色调，改为更浅的颜色
   grayOp50: 'rgba(249, 250, 251, 0.5)', //bg-gray-50/50
-  primaryDark: '#49807D',
-  primaryDark5: '#406F6D', // text-primary-dark5 (假设)
+  // primaryDark: '#49807D',
+  primaryDark: '#CCD7E3', // 之前的 primary-dark，改为更浅的颜色
+  // primaryDark5: '#406F6D', // text-primary-dark5 (假设)
+  primaryDark5: '#929FAC', // 之前的 primary-dark5，改为更浅的颜色
   primaryLight: '#DEECEB', // 之前用到的浅色背景
   primaryOp20: 'rgba(118, 189, 185, 0.2)', // bg-primary/20 (Assuming primary is #76BDB9)
   black: '#000000',

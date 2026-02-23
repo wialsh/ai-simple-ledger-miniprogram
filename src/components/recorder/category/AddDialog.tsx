@@ -11,7 +11,7 @@ interface AddCategoryDialogProps {
 }
 
 export const AddCategoryDialog: React.FC<AddCategoryDialogProps> = ({ onClose }) => {
-  const { updateLedgerCategories } = useContext(AppContext);
+  const { ledgerId, updateLedgerCategories } = useContext(AppContext);
   // const [textValue, setTextValue] = useState('');
   // 1. 改用 Ref 存储数据，不触发渲染
   const textValueRef = useRef('');
@@ -32,7 +32,7 @@ export const AddCategoryDialog: React.FC<AddCategoryDialogProps> = ({ onClose })
     }
 
     const newCategories: LedgerCategory[] = uniqueNames.map(name => {
-      const catId = hashIdByCrypto(name);
+      const catId = hashIdByCrypto(`${ledgerId}-${name}`);
       return {
         catId,
         name,

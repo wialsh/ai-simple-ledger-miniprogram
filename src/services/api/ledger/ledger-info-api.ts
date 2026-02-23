@@ -20,4 +20,11 @@ export const ledgersInfoService = {
   delete: async (id: string) => {
     await apiClient.delete(`/ledger/${id}`);
   },
+
+  // AI 初始化账本分类
+  aiInit: async (ledgerId: number, description: string) => {
+    await apiClient.post(`/ledger/${ledgerId}/ai-init`, description, {
+      headers: { 'Content-Type': 'text/plain' },
+    });
+  },
 };

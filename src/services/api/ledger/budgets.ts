@@ -41,7 +41,7 @@ export const ledgerBudgetsService = {
     }
   },
 
-  getFromLocal: () => {
+  getFromLocal: (ledgerId: number) => {
     return getFromLocal() || getFromDefault();
   },
 

@@ -1,6 +1,7 @@
 import React, { useContext, useRef } from 'react';
 import { View, Text, RootPortal, Textarea } from '@tarojs/components';
 import { AppContext } from '@/context/AppContext';
+import { ledgersInfoService } from '@/services/api/ledger/ledger-info-api';
 import { COLORS } from '@/styles/colors';
 
 interface LedgerDescriptionDialogProps {
@@ -9,7 +10,7 @@ interface LedgerDescriptionDialogProps {
 }
 
 export const LedgerDescriptionDialog: React.FC<LedgerDescriptionDialogProps> = ({ onClose }) => {
-  const { updateLedgerInfo } = useContext(AppContext);
+  const { ledgerId, updateLedgerInfo } = useContext(AppContext);
   // const [textValue, setTextValue] = useState('');
   // 1. 改用 Ref 存储数据，不触发渲染
   const textValueRef = useRef('');
@@ -24,6 +25,14 @@ export const LedgerDescriptionDialog: React.FC<LedgerDescriptionDialogProps> = (
       description: ledgerDescriton,
       type: 1,
     });
+
+    // 异步触发 AI 生成账本名称和分类（fire and forget）
+    if (ledgerId) {
+      ledgersInfoService.aiInit(Number(ledgerId), ledgerDescriton).catch(err => {
+        console.error('AI 初始化账本失败', err);
+      });
+    }
+
     onClose();
   };
 

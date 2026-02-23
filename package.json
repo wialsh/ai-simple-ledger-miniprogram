@@ -12,6 +12,7 @@
   "scripts": {
     "dev:weapp": "npm run build:weapp -- --watch",
     "dev:weapp:test": "npm run build:weapp -- --watch --mode test",
+    "build:weapp": "taro build --type weapp",
     "dev:swan": "npm run build:swan -- --watch",
     "dev:alipay": "npm run build:alipay -- --watch",
     "dev:tt": "npm run build:tt -- --watch",
@@ -24,7 +25,6 @@
     "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx}'",
     "prepare": "husky",
     "new": "taro new",
-    "build:weapp": "taro build --type weapp",
     "build:weapp:test": "taro build --type weapp --mode test",
     "build:swan": "taro build --type swan",
     "build:alipay": "taro build --type alipay",

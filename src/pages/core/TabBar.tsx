@@ -12,7 +12,7 @@ interface TabBarProps {
 export const TabBar: React.FC<TabBarProps> = ({ active, onChange }) => {
   // 辅助函数：根据选中状态获取颜色
   const getColor = (tabName: Tab) => {
-    return active === tabName ? COLORS.primaryDark : COLORS.gray400;
+    return active === tabName ? COLORS.gray900 : COLORS.gray400;
   };
 
   // 辅助函数：通用 Tab Item 样式

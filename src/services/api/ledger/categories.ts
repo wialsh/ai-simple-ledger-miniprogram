@@ -10,8 +10,8 @@ const getFromLocal = () => {
   return { categories };
 };
 
-const getFromDefault = () => {
-  const categories = ledgerConstants.getDefaultCategories();
+const getFromDefault = (ledgerId: number) => {
+  const categories = ledgerConstants.getDefaultCategories(ledgerId);
   storageService.set(cachedKey, categories);
   console.log(`使用默认账本分类数据，${cachedKey}：`, categories);
   return { categories };
@@ -35,15 +35,15 @@ export const ledgerCategoriesService = {
       return { categories };
     }
     try {
-      return (await getFromServer(ledgerId)) || getFromDefault();
+      return (await getFromServer(ledgerId)) || getFromDefault(ledgerId);
     } catch (err) {
       console.error('后台获取账本列表失败', err);
-      return getFromDefault();
+      return getFromDefault(ledgerId);
     }
   },
 
-  getFromLocal: () => {
-    return getFromLocal() || getFromDefault();
+  getFromLocal: (ledgerId: number) => {
+    return getFromLocal() || getFromDefault(ledgerId);
   },
 
   save: async (ledgerId: number, categories: LedgerCategory[]) => {

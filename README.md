@@ -37,6 +37,29 @@ yarn add @nutui/icons-react-taro
 yarn add echarts echarts-taro3-react
 ```
 
+## git提交
+
+```bash
+git commit -m "feat(auth): 添加手机号登录功能"
+git commit -m "fix(api): 修复获取用户信息接口返回空问题"
+git commit -m "refactor(utils): 封装请求拦截器"
+git commit -m "docs: 更新项目部署说明"
+```
+
+| 类型（type） | 中文含义      | 适用场景说明                                                          |
+| ------------ | ------------- | --------------------------------------------------------------------- |
+| `feat`       | 新功能        | 新增用户可见的功能，如“添加登录页面”、“支持微信支付”                  |
+| `fix`        | 修复 bug      | 修复已存在的问题，如“修复登录失败”、“解决样式错位”                    |
+| `docs`       | 文档          | 仅修改文档（README、注释、帮助文件等），不涉及代码逻辑                |
+| `style`      | 代码格式      | 不影响逻辑的代码样式调整，如空格、分号、Prettier 格式化               |
+| `refactor`   | 重构          | 既不是新功能也不是修复 bug 的代码改进，如抽取函数、封装接口、优化结构 |
+| `perf`       | 性能优化      | 提升性能的改动，如减少请求次数、缓存优化、算法改进                    |
+| `test`       | 测试          | 新增或修改测试用例，如单元测试、E2E 测试                              |
+| `build`      | 构建系统      | 影响构建流程或依赖的改动，如 Webpack 配置、CI 脚本、npm scripts       |
+| `ci`         | 持续集成      | CI 配置文件和脚本，如 GitHub Actions、GitLab CI                       |
+| `chore`      | 杂项/日常维护 | 其他不改变源码或测试的琐碎任务，如更新 .gitignore、调整目录结构       |
+| `revert`     | 回滚          | 撤销之前的某次提交，如 `revert: feat: 添加实验性功能`                 |
+
 ## 清除缓存
 
 ```bash
